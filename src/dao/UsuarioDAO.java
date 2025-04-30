@@ -9,8 +9,7 @@ import modelo.Usuario;
 import modelo.Usuario.TipoUsuario;
 
 public class UsuarioDAO {
-    
-    // Método para inserir um novo usuário
+ 
     public int inserir(Usuario usuario) throws SQLException {
         String sql = "INSERT INTO usuarios (nome, email, senha, telefone, tipo_usuario) VALUES (?, ?, ?, ?, ?)";
         
@@ -47,7 +46,6 @@ public class UsuarioDAO {
         }
     }
     
-    // Verifica se um email já existe no banco
     public boolean emailExiste(String email) throws SQLException {
         String sql = "SELECT COUNT(*) FROM usuarios WHERE email = ?";
         
@@ -74,7 +72,6 @@ public class UsuarioDAO {
         }
     }
     
-    // Método para autenticar um usuário
     public Usuario autenticar(String email, String senha) throws SQLException {
         String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
         

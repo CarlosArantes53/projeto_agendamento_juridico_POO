@@ -13,11 +13,9 @@ public class Usuario {
         SECRETARIO
     }
     
-    // Construtor padrão
     public Usuario() {
     }
     
-    // Construtor com parâmetros (sem ID - para cadastro)
     public Usuario(String nome, String email, String senha, String telefone, TipoUsuario tipoUsuario) {
         this.nome = nome;
         this.email = email;
@@ -26,7 +24,6 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
     
-    // Construtor completo
     public Usuario(int id, String nome, String email, String senha, String telefone, TipoUsuario tipoUsuario) {
         this.id = id;
         this.nome = nome;
@@ -36,7 +33,6 @@ public class Usuario {
         this.tipoUsuario = tipoUsuario;
     }
 
-    // Getters e Setters
     public int getId() {
         return id;
     }

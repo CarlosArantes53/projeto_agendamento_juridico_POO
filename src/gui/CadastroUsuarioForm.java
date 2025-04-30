@@ -38,16 +38,15 @@ public class CadastroUsuarioForm extends JFrame {
     private UsuarioDAO usuarioDAO;
     
     public CadastroUsuarioForm() {
-        // Inicializa o DAO
+        
         usuarioDAO = new UsuarioDAO();
         
-        // Configurações do formulário
+        
         setTitle("Cadastro de Usuário");
         setSize(450, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        // Painel principal com GridBagLayout
         JPanel painelPrincipal = new JPanel(new GridBagLayout());
         painelPrincipal.setBorder(new EmptyBorder(20, 20, 20, 20));
         
@@ -55,7 +54,6 @@ public class CadastroUsuarioForm extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
         
-        // Labels e campos
         gbc.gridx = 0;
         gbc.gridy = 0;
         painelPrincipal.add(new JLabel("Nome Completo:"), gbc);
@@ -95,7 +93,6 @@ public class CadastroUsuarioForm extends JFrame {
         txtTelefone = new JTextField(20);
         painelPrincipal.add(txtTelefone, gbc);
         
-        // Tipo de usuário
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.weightx = 0.0;
@@ -115,7 +112,6 @@ public class CadastroUsuarioForm extends JFrame {
         painelTipo.add(rdbSecretario);
         painelPrincipal.add(painelTipo, gbc);
         
-        // Botões
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton btnCadastrar = new JButton("Cadastrar");
         JButton btnLimpar = new JButton("Limpar");
@@ -137,21 +133,18 @@ public class CadastroUsuarioForm extends JFrame {
         painelBotoes.add(btnCadastrar);
         painelBotoes.add(btnLimpar);
         
-        // Adiciona componentes ao frame
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(painelPrincipal, BorderLayout.CENTER);
         getContentPane().add(painelBotoes, BorderLayout.SOUTH);
     }
     
     private void cadastrarUsuario() {
-        // Obter valores dos campos
         String nome = txtNome.getText().trim();
         String email = txtEmail.getText().trim();
         String senha = new String(txtSenha.getPassword());
         String telefone = txtTelefone.getText().trim();
         TipoUsuario tipoUsuario = rdbAdvogado.isSelected() ? TipoUsuario.ADVOGADO : TipoUsuario.SECRETARIO;
         
-        // Validações
         if (nome.isEmpty() || email.isEmpty() || senha.isEmpty() || telefone.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Todos os campos são obrigatórios!", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
@@ -175,27 +168,25 @@ public class CadastroUsuarioForm extends JFrame {
         }
         
         try {
-            // Verificar se o email já existe
             if (usuarioDAO.emailExiste(email)) {
                 JOptionPane.showMessageDialog(this, "Este e-mail já está cadastrado no sistema!", 
                     "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
-            // Criar objeto de usuário
             Usuario usuario = new Usuario(nome, email, senha, telefone, tipoUsuario);
             
-            // Salvar no banco de dados
             int idGerado = usuarioDAO.inserir(usuario);
             
             if (idGerado > 0) {
                 JOptionPane.showMessageDialog(this, 
-                    "Usuário cadastrado com sucesso!\nID gerado: " + idGerado, 
+                    "Usuário criado, e-mail de confirmação enviado", 
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 
                 limparCampos();
                 
-                // Aqui poderia direcionar para a tela de login ou menu principal
+                dispose();
+                new LoginForm().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Erro ao cadastrar usuário!", 
                     "Erro", JOptionPane.ERROR_MESSAGE);
