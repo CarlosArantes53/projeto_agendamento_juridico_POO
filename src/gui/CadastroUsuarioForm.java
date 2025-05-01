@@ -1,10 +1,12 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -28,6 +30,8 @@ import util.Validador;
 
 public class CadastroUsuarioForm extends JFrame {
     private static final long serialVersionUID = 1L;
+    private static final Color BACKGROUND_COLOR = new Color(18,18,19);
+    private static final Color TEXT_COLOR = Color.WHITE;
     
     private JTextField txtNome;
     private JTextField txtEmail;
@@ -41,67 +45,100 @@ public class CadastroUsuarioForm extends JFrame {
         
         usuarioDAO = new UsuarioDAO();
         
-        
         setTitle("Cadastro de Usuário");
-        setSize(450, 350);
+        setSize(480, 480);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
+        getContentPane().setBackground(BACKGROUND_COLOR);
+        
         JPanel painelPrincipal = new JPanel(new GridBagLayout());
         painelPrincipal.setBorder(new EmptyBorder(20, 20, 20, 20));
+        painelPrincipal.setBackground(BACKGROUND_COLOR);
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
         
+        JLabel lblTitulo = new JLabel("Cadastro de novo usuário");
+        lblTitulo.setForeground(TEXT_COLOR);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
+        lblTitulo.setHorizontalAlignment(JLabel.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        painelPrincipal.add(new JLabel("Nome Completo:"), gbc);
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(5, 5, 15, 5);
+        painelPrincipal.add(lblTitulo, gbc);
+        
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        
+        JLabel lblNome = new JLabel("Nome Completo:");
+        lblNome.setForeground(TEXT_COLOR);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        painelPrincipal.add(lblNome, gbc);
         
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         txtNome = new JTextField(20);
         painelPrincipal.add(txtNome, gbc);
         
+        JLabel lblEmail = new JLabel("E-mail:");
+        lblEmail.setForeground(TEXT_COLOR);
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.weightx = 0.0;
-        painelPrincipal.add(new JLabel("E-mail:"), gbc);
+        painelPrincipal.add(lblEmail, gbc);
         
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         txtEmail = new JTextField(20);
         painelPrincipal.add(txtEmail, gbc);
         
+        JLabel lblSenha = new JLabel("Senha:");
+        lblSenha.setForeground(TEXT_COLOR);
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.weightx = 0.0;
-        painelPrincipal.add(new JLabel("Senha:"), gbc);
+        painelPrincipal.add(lblSenha, gbc);
         
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         txtSenha = new JPasswordField(20);
         painelPrincipal.add(txtSenha, gbc);
         
+        JLabel lblTelefone = new JLabel("Telefone:");
+        lblTelefone.setForeground(TEXT_COLOR);
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.weightx = 0.0;
-        painelPrincipal.add(new JLabel("Telefone:"), gbc);
+        painelPrincipal.add(lblTelefone, gbc);
         
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         txtTelefone = new JTextField(20);
         painelPrincipal.add(txtTelefone, gbc);
         
+        JLabel lblTipoUsuario = new JLabel("Tipo de Usuário:");
+        lblTipoUsuario.setForeground(TEXT_COLOR);
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.weightx = 0.0;
-        painelPrincipal.add(new JLabel("Tipo de Usuário:"), gbc);
+        painelPrincipal.add(lblTipoUsuario, gbc);
         
         gbc.gridx = 1;
         JPanel painelTipo = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelTipo.setBackground(BACKGROUND_COLOR);
+        
         rdbAdvogado = new JRadioButton("Advogado");
+        rdbAdvogado.setForeground(TEXT_COLOR);
+        rdbAdvogado.setBackground(BACKGROUND_COLOR);
+        
         rdbSecretario = new JRadioButton("Secretário");
+        rdbSecretario.setForeground(TEXT_COLOR);
+        rdbSecretario.setBackground(BACKGROUND_COLOR);
+        
         rdbAdvogado.setSelected(true);
         
         ButtonGroup grupoTipo = new ButtonGroup();
@@ -113,8 +150,17 @@ public class CadastroUsuarioForm extends JFrame {
         painelPrincipal.add(painelTipo, gbc);
         
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        painelBotoes.setBackground(BACKGROUND_COLOR);
+        
         JButton btnCadastrar = new JButton("Cadastrar");
+        btnCadastrar.setBackground(new Color(0, 150, 136));
+        btnCadastrar.setForeground(Color.BLACK);
+        btnCadastrar.setFocusPainted(false);
+        
         JButton btnLimpar = new JButton("Limpar");
+        btnLimpar.setBackground(new Color(211, 47, 47));
+        btnLimpar.setForeground(Color.BLACK);
+        btnLimpar.setFocusPainted(false);
         
         btnCadastrar.addActionListener(new ActionListener() {
             @Override
