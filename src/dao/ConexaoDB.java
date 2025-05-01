@@ -15,7 +15,7 @@ public class ConexaoDB {
             Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(URL, USUARIO, SENHA);
         } catch (ClassNotFoundException e) {
-            throw new SQLException("Driver JDBC do MySQL não encontrado", e);
+            throw new SQLException(e);
         }
     }
     
