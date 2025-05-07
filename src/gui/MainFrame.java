@@ -15,8 +15,8 @@ public class MainFrame extends JFrame {
     public static final String HOME_PANEL = "home";
     public static final String RECUPERAR_SENHA_PANEL = "recuperarSenha";
     public static final String EDITAR_PERFIL_PANEL = "editarPerfil";
-    public static final String CADASTRO_CLIENTE_PANEL = "cadastroCliente"; // Nova constante
-    public static final String LISTAR_CLIENTES_PANEL = "listarClientes"; // Nova constante para futura listagem
+    public static final String CADASTRO_CLIENTE_PANEL = "cadastroCliente";
+    public static final String LISTAR_CLIENTES_PANEL = "listarClientes";
     
     private JPanel contentPane;
     private CardLayout cardLayout;
@@ -26,13 +26,13 @@ public class MainFrame extends JFrame {
     private HomePanel homePanel;
     private RecuperarSenhaPanel recuperarSenhaPanel;
     private EditarPerfilPanel editarPerfilPanel;
-    private CadastroClientePanel cadastroClientePanel; // Novo painel
+    private CadastroClientePanel cadastroClientePanel;
     
     private Usuario usuarioLogado;
     
     public MainFrame() {
         setTitle("HERMES - Sistema de Agendamentos Jurídicos");
-        setSize(600, 400);
+        setSize(1200, 900); // Tamanho maior para acomodar o menu lateral
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
