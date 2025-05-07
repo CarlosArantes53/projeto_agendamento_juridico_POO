@@ -1,4 +1,4 @@
-import gui.LoginForm;
+import gui.MainFrame;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -16,8 +16,8 @@ public class MainApp {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                LoginForm loginForm = new LoginForm();
-                loginForm.setVisible(true);
+                MainFrame mainFrame = new MainFrame();
+                mainFrame.setVisible(true);
             
             }
         });

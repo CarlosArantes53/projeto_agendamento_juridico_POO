@@ -1,37 +1,31 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
 
 import dao.UsuarioDAO;
 import modelo.Usuario;
 import modelo.Usuario.TipoUsuario;
+import util.UIConstants;
 import util.Validador;
 
-public class CadastroUsuarioForm extends JFrame {
+public class CadastroUsuarioPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-    private static final Color BACKGROUND_COLOR = new Color(18,18,19);
-    private static final Color TEXT_COLOR = Color.WHITE;
     
     private JTextField txtNome;
     private JTextField txtEmail;
@@ -40,29 +34,28 @@ public class CadastroUsuarioForm extends JFrame {
     private JRadioButton rdbAdvogado;
     private JRadioButton rdbSecretario;
     private UsuarioDAO usuarioDAO;
+    private MainFrame mainFrame;
     
-    public CadastroUsuarioForm() {
-        
+    public CadastroUsuarioPanel(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
         usuarioDAO = new UsuarioDAO();
         
-        setTitle("Cadastro de Usuário");
-        setSize(480, 480);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        // Set background color
+        setBackground(UIConstants.BACKGROUND_COLOR);
         
-        getContentPane().setBackground(BACKGROUND_COLOR);
+        setLayout(new BorderLayout());
         
         JPanel painelPrincipal = new JPanel(new GridBagLayout());
-        painelPrincipal.setBorder(new EmptyBorder(20, 20, 20, 20));
-        painelPrincipal.setBackground(BACKGROUND_COLOR);
+        painelPrincipal.setBorder(UIConstants.PANEL_PADDING);
+        painelPrincipal.setBackground(UIConstants.BACKGROUND_COLOR);
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
         
-        JLabel lblTitulo = new JLabel("Cadastro de novo usuário");
-        lblTitulo.setForeground(TEXT_COLOR);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
+        // Title
+        JLabel lblTitulo = new JLabel();
+        UIConstants.setupSubtitleLabel(lblTitulo, "Cadastro de novo usuário");
         lblTitulo.setHorizontalAlignment(JLabel.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -73,8 +66,9 @@ public class CadastroUsuarioForm extends JFrame {
         gbc.gridwidth = 1;
         gbc.insets = new Insets(5, 5, 5, 5);
         
-        JLabel lblNome = new JLabel("Nome Completo:");
-        lblNome.setForeground(TEXT_COLOR);
+        // Nome label
+        JLabel lblNome = new JLabel();
+        UIConstants.setupLabel(lblNome, "Nome Completo:");
         gbc.gridx = 0;
         gbc.gridy = 1;
         painelPrincipal.add(lblNome, gbc);
@@ -84,8 +78,9 @@ public class CadastroUsuarioForm extends JFrame {
         txtNome = new JTextField(20);
         painelPrincipal.add(txtNome, gbc);
         
-        JLabel lblEmail = new JLabel("E-mail:");
-        lblEmail.setForeground(TEXT_COLOR);
+        // Email label
+        JLabel lblEmail = new JLabel();
+        UIConstants.setupLabel(lblEmail, "E-mail:");
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 0.0;
@@ -96,8 +91,9 @@ public class CadastroUsuarioForm extends JFrame {
         txtEmail = new JTextField(20);
         painelPrincipal.add(txtEmail, gbc);
         
-        JLabel lblSenha = new JLabel("Senha:");
-        lblSenha.setForeground(TEXT_COLOR);
+        // Senha label
+        JLabel lblSenha = new JLabel();
+        UIConstants.setupLabel(lblSenha, "Senha:");
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 0.0;
@@ -108,8 +104,9 @@ public class CadastroUsuarioForm extends JFrame {
         txtSenha = new JPasswordField(20);
         painelPrincipal.add(txtSenha, gbc);
         
-        JLabel lblTelefone = new JLabel("Telefone:");
-        lblTelefone.setForeground(TEXT_COLOR);
+        // Telefone label
+        JLabel lblTelefone = new JLabel();
+        UIConstants.setupLabel(lblTelefone, "Telefone:");
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.weightx = 0.0;
@@ -120,8 +117,9 @@ public class CadastroUsuarioForm extends JFrame {
         txtTelefone = new JTextField(20);
         painelPrincipal.add(txtTelefone, gbc);
         
-        JLabel lblTipoUsuario = new JLabel("Tipo de Usuário:");
-        lblTipoUsuario.setForeground(TEXT_COLOR);
+        // Tipo de usuário label
+        JLabel lblTipoUsuario = new JLabel();
+        UIConstants.setupLabel(lblTipoUsuario, "Tipo de Usuário:");
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.weightx = 0.0;
@@ -129,15 +127,13 @@ public class CadastroUsuarioForm extends JFrame {
         
         gbc.gridx = 1;
         JPanel painelTipo = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        painelTipo.setBackground(BACKGROUND_COLOR);
+        painelTipo.setBackground(UIConstants.BACKGROUND_COLOR);
         
-        rdbAdvogado = new JRadioButton("Advogado");
-        rdbAdvogado.setForeground(TEXT_COLOR);
-        rdbAdvogado.setBackground(BACKGROUND_COLOR);
+        rdbAdvogado = new JRadioButton();
+        UIConstants.setupRadioButton(rdbAdvogado, "Advogado");
         
-        rdbSecretario = new JRadioButton("Secretário");
-        rdbSecretario.setForeground(TEXT_COLOR);
-        rdbSecretario.setBackground(BACKGROUND_COLOR);
+        rdbSecretario = new JRadioButton();
+        UIConstants.setupRadioButton(rdbSecretario, "Secretário");
         
         rdbAdvogado.setSelected(true);
         
@@ -149,18 +145,15 @@ public class CadastroUsuarioForm extends JFrame {
         painelTipo.add(rdbSecretario);
         painelPrincipal.add(painelTipo, gbc);
         
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        painelBotoes.setBackground(BACKGROUND_COLOR);
+        // Buttons panel
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        painelBotoes.setBackground(UIConstants.BACKGROUND_COLOR);
         
-        JButton btnCadastrar = new JButton("Cadastrar");
-        btnCadastrar.setBackground(new Color(0, 150, 136));
-        btnCadastrar.setForeground(Color.BLACK);
-        btnCadastrar.setFocusPainted(false);
+        JButton btnCadastrar = new JButton();
+        UIConstants.setupPrimaryButton(btnCadastrar, "Cadastrar");
         
-        JButton btnLimpar = new JButton("Limpar");
-        btnLimpar.setBackground(new Color(211, 47, 47));
-        btnLimpar.setForeground(Color.BLACK);
-        btnLimpar.setFocusPainted(false);
+        JButton btnVoltar = new JButton();
+        UIConstants.setupDangerButton(btnVoltar, "Voltar");
         
         btnCadastrar.addActionListener(new ActionListener() {
             @Override
@@ -169,19 +162,19 @@ public class CadastroUsuarioForm extends JFrame {
             }
         });
         
-        btnLimpar.addActionListener(new ActionListener() {
+        btnVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 limparCampos();
+                mainFrame.mostrarPainel(MainFrame.LOGIN_PANEL);
             }
         });
         
         painelBotoes.add(btnCadastrar);
-        painelBotoes.add(btnLimpar);
+        painelBotoes.add(btnVoltar);
         
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(painelPrincipal, BorderLayout.CENTER);
-        getContentPane().add(painelBotoes, BorderLayout.SOUTH);
+        add(painelPrincipal, BorderLayout.CENTER);
+        add(painelBotoes, BorderLayout.SOUTH);
     }
     
     private void cadastrarUsuario() {
@@ -230,9 +223,7 @@ public class CadastroUsuarioForm extends JFrame {
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 
                 limparCampos();
-                
-                dispose();
-                new LoginForm().setVisible(true);
+                mainFrame.mostrarPainel(MainFrame.LOGIN_PANEL);
             } else {
                 JOptionPane.showMessageDialog(this, "Erro ao cadastrar usuário!", 
                     "Erro", JOptionPane.ERROR_MESSAGE);
@@ -251,15 +242,5 @@ public class CadastroUsuarioForm extends JFrame {
         txtSenha.setText("");
         txtTelefone.setText("");
         rdbAdvogado.setSelected(true);
-        txtNome.requestFocus();
-    }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new CadastroUsuarioForm().setVisible(true);
-            }
-        });
     }
 }

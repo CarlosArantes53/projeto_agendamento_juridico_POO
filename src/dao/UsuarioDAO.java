@@ -106,4 +106,49 @@ public class UsuarioDAO {
             ConexaoDB.closeConnection(conn);
         }
     }
+    
+    // Novo método para atualização de senha
+    public boolean atualizarSenha(String email, String novaSenha) throws SQLException {
+        String sql = "UPDATE usuarios SET senha = ? WHERE email = ?";
+        
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        
+        try {
+            conn = ConexaoDB.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, novaSenha);
+            stmt.setString(2, email);
+            
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+        } finally {
+            if (stmt != null) stmt.close();
+            ConexaoDB.closeConnection(conn);
+        }
+    }
+    
+    // Novo método para atualização do perfil do usuário
+    public boolean atualizarPerfil(Usuario usuario) throws SQLException {
+        String sql = "UPDATE usuarios SET nome = ?, email = ?, telefone = ?, tipo_usuario = ? WHERE id = ?";
+        
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        
+        try {
+            conn = ConexaoDB.getConnection();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, usuario.getNome());
+            stmt.setString(2, usuario.getEmail());
+            stmt.setString(3, usuario.getTelefone());
+            stmt.setString(4, usuario.getTipoUsuario().toString());
+            stmt.setInt(5, usuario.getId());
+            
+            int linhasAfetadas = stmt.executeUpdate();
+            return linhasAfetadas > 0;
+        } finally {
+            if (stmt != null) stmt.close();
+            ConexaoDB.closeConnection(conn);
+        }
+    }
 }
