@@ -6,8 +6,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,40 +19,97 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import gui.cliente.ClientesListPanel;
+import gui.cliente.EditarClientePanel;
+import gui.common.HeaderPanel;
+import gui.util.IconManager;
+import gui.util.UIConstants;
 import modelo.Cliente;
 import modelo.Usuario;
-import util.IconManager;
-import util.UIConstants;
 
+/**
+ * Painel principal da aplicação após o login
+ */
 public class HomePanel extends JPanel {
     private static final long serialVersionUID = 1L;
     
+    // Constantes para identificar painéis no CardLayout
+    private static final String DASHBOARD_PANEL = "dashboard";
+    private static final String CLIENTES_PANEL = "clientes";
+    private static final String EDITAR_CLIENTE_PANEL = "editarCliente";
+    
+    // Componentes principais
     private Usuario usuarioLogado;
     private JPanel sideMenu;
     private boolean sideMenuVisible = true;
     private JPanel contentContainer;
     private CardLayout contentCardLayout;
     
+    // Painéis de conteúdo
     private ClientesListPanel clientesListPanel;
     private EditarClientePanel editarClientePanel;
     
-    private static final String DASHBOARD_PANEL = "dashboard";
-    private static final String CLIENTES_PANEL = "clientes";
-    private static final String EDITAR_CLIENTE_PANEL = "editarCliente";
+    private MainFrame mainFrame;
     
+    /**
+     * Construtor
+     */
     public HomePanel(MainFrame mainFrame, Usuario usuario) {
+        this.mainFrame = mainFrame;
         this.usuarioLogado = usuario;
         
         setBackground(UIConstants.BACKGROUND_COLOR);
         setLayout(new BorderLayout());
         
-        // HEADER PANEL
+        // Criar componentes principais
+        JPanel headerPanel = criarPainelCabecalho();
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(UIConstants.BACKGROUND_COLOR);
+        
+        // Criar menu lateral
+        sideMenu = criarMenuLateral();
+        
+        // Criar container de conteúdo com CardLayout
+        contentCardLayout = new CardLayout();
+        contentContainer = new JPanel(contentCardLayout);
+        contentContainer.setBackground(UIConstants.PANEL_BACKGROUND);
+        
+        // Criar painéis de conteúdo padrão
+        JPanel dashboardPanel = criarPainelDashboard();
+        contentContainer.add(dashboardPanel, DASHBOARD_PANEL);
+        
+        clientesListPanel = new ClientesListPanel(mainFrame);
+        contentContainer.add(clientesListPanel, CLIENTES_PANEL);
+        
+        // Adicionar componentes ao painel principal
+        mainPanel.add(sideMenu, BorderLayout.WEST);
+        mainPanel.add(contentContainer, BorderLayout.CENTER);
+        
+        // Adicionar componentes à tela
+        add(headerPanel, BorderLayout.NORTH);
+        add(mainPanel, BorderLayout.CENTER);
+        
+        // Painel de boas-vindas
+        JPanel welcomePanel = criarPainelBoasVindas();
+        JPanel welcomeContainer = new JPanel(new BorderLayout());
+        welcomeContainer.setOpaque(false);
+        welcomeContainer.add(welcomePanel, BorderLayout.NORTH);
+        welcomeContainer.setBorder(new EmptyBorder(15, 0, 0, 15));
+        
+        // Mostrar dashboard por padrão
+        contentCardLayout.show(contentContainer, DASHBOARD_PANEL);
+    }
+    
+    /**
+     * Cria o painel de cabeçalho
+     */
+    private JPanel criarPainelCabecalho() {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(UIConstants.HEADER_COLOR);
         headerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIConstants.HEADER_BORDER_COLOR));
         headerPanel.setPreferredSize(new Dimension(getWidth(), 50));
         
-        // Menu button
+        // Botão do menu
         JButton btnMenu = new JButton();
         IconManager.setupIconButton(btnMenu, IconManager.ICON_MENU, "Menu", 40);
         if (btnMenu.getIcon() == null) {
@@ -66,7 +121,7 @@ public class HomePanel extends JPanel {
         btnMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                toggleSideMenu();
+                alternarMenuLateral();
             }
         });
         
@@ -74,13 +129,13 @@ public class HomePanel extends JPanel {
         leftHeaderPanel.setBackground(UIConstants.HEADER_COLOR);
         leftHeaderPanel.add(btnMenu);
         
-        // App title in center
+        // Título do aplicativo no centro
         JLabel lblTitle = new JLabel("HERMES");
         lblTitle.setForeground(UIConstants.HIGHLIGHT_TEXT_COLOR);
         lblTitle.setFont(UIConstants.TITLE_FONT);
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         
-        // User profile and logout buttons in right corner
+        // Painel direito com perfil do usuário e botão de logout
         JPanel rightHeaderPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
         rightHeaderPanel.setBackground(UIConstants.HEADER_COLOR);
         
@@ -104,19 +159,8 @@ public class HomePanel extends JPanel {
             btnLogout.setFont(new Font("Arial", Font.PLAIN, 16));
         }
         
-        btnProfile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainFrame.mostrarPainelEditarPerfil();
-            }
-        });
-        
-        btnLogout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainFrame.fazerLogout();
-            }
-        });
+        btnProfile.addActionListener(e -> mainFrame.mostrarPainelEditarPerfil());
+        btnLogout.addActionListener(e -> mainFrame.fazerLogout());
         
         rightHeaderPanel.add(lblUserName);
         rightHeaderPanel.add(btnProfile);
@@ -126,66 +170,20 @@ public class HomePanel extends JPanel {
         headerPanel.add(lblTitle, BorderLayout.CENTER);
         headerPanel.add(rightHeaderPanel, BorderLayout.EAST);
         
-        // MAIN CONTENT AREA
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(UIConstants.BACKGROUND_COLOR);
-        
-        // Create and show side menu
-        sideMenu = createSideMenu(mainFrame);
-        
-        // Content container with card layout
-        contentCardLayout = new CardLayout();
-        contentContainer = new JPanel(contentCardLayout);
-        contentContainer.setBackground(UIConstants.PANEL_BACKGROUND);
-        
-        // Create default panels
-        JPanel dashboardPanel = createDashboardPanel();
-        contentContainer.add(dashboardPanel, DASHBOARD_PANEL);
-        
-        clientesListPanel = new ClientesListPanel(mainFrame);
-        contentContainer.add(clientesListPanel, CLIENTES_PANEL);
-        
-        // Add main components to the panel
-        mainPanel.add(sideMenu, BorderLayout.WEST);
-        mainPanel.add(contentContainer, BorderLayout.CENTER);
-        
-        // Add main components to the frame
-        add(headerPanel, BorderLayout.NORTH);
-        add(mainPanel, BorderLayout.CENTER);
-        
-        // Welcome message panel in top-right corner
-        JPanel welcomePanel = new JPanel();
-        welcomePanel.setBackground(UIConstants.WELCOME_PANEL_BG);
-        welcomePanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(0, 90, 80), 1),
-            new EmptyBorder(8, 15, 8, 15)
-        ));
-        
-        JLabel lblWelcome = new JLabel("Bem-vindo(a), " + usuarioLogado.getNome());
-        lblWelcome.setForeground(Color.WHITE);
-        lblWelcome.setFont(UIConstants.LABEL_FONT);
-        welcomePanel.add(lblWelcome);
-        
-        // Welcome panel positioning
-    // Welcome panel positioning
-    JPanel welcomeContainer = new JPanel(new BorderLayout());
-    welcomeContainer.setOpaque(false);
-    welcomeContainer.add(welcomePanel, BorderLayout.NORTH);
-    welcomeContainer.setBorder(new EmptyBorder(15, 0, 0, 15));
-
-    // Show dashboard panel by default
-    contentCardLayout.show(contentContainer, DASHBOARD_PANEL);
-        
+        return headerPanel;
     }
     
-    private JPanel createSideMenu(MainFrame mainFrame) {
+    /**
+     * Cria o painel de menu lateral
+     */
+    private JPanel criarMenuLateral() {
         JPanel menu = new JPanel();
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
         menu.setBackground(UIConstants.MENU_BACKGROUND);
         menu.setPreferredSize(UIConstants.MENU_WIDTH);
         menu.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, UIConstants.HEADER_BORDER_COLOR));
         
-        // Menu title
+        // Título do menu
         JLabel lblMenuTitle = new JLabel("Menu Principal");
         lblMenuTitle.setForeground(UIConstants.TEXT_COLOR);
         lblMenuTitle.setFont(UIConstants.SUBTITLE_FONT);
@@ -195,68 +193,60 @@ public class HomePanel extends JPanel {
         menu.add(lblMenuTitle);
         menu.add(Box.createRigidArea(new Dimension(0, 10)));
         
-        // Dashboard option
-        JPanel dashboardOption = createMenuOption(
+        // Opção Dashboard
+        JPanel dashboardOption = criarOpcaoMenu(
             "Dashboard", 
             IconManager.ICON_DASHBOARD, 
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    contentCardLayout.show(contentContainer, DASHBOARD_PANEL);
-                }
-            }
+            e -> contentCardLayout.show(contentContainer, DASHBOARD_PANEL)
         );
         menu.add(dashboardOption);
         
-        // CLIENTES section
-        JPanel clientesHeader = createMenuHeader("CLIENTES");
+        // Seção CLIENTES
+        JPanel clientesHeader = criarCabecalhoMenu("CLIENTES");
         menu.add(clientesHeader);
         
-        // Listar clientes option
-        JPanel listarClientesOption = createMenuOption(
+        // Opção Listar clientes
+        JPanel listarClientesOption = criarOpcaoMenu(
             "Clientes", 
             IconManager.ICON_LIST, 
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    clientesListPanel.carregarClientes();
-                    contentCardLayout.show(contentContainer, CLIENTES_PANEL);
-                }
+            e -> {
+                clientesListPanel.carregarClientes();
+                contentCardLayout.show(contentContainer, CLIENTES_PANEL);
             }
         );
         menu.add(listarClientesOption);
         
-        // AGENDAMENTOS section
-        JPanel agendamentosHeader = createMenuHeader("AGENDAMENTOS");
+        // Seção AGENDAMENTOS
+        JPanel agendamentosHeader = criarCabecalhoMenu("AGENDAMENTOS");
         menu.add(agendamentosHeader);
         
-        // Novo Agendamento option
-        JPanel novoAgendamentoOption = createMenuOption(
+        // Opção Novo Agendamento
+        JPanel novoAgendamentoOption = criarOpcaoMenu(
             "Novo Agendamento", 
             IconManager.ICON_CALENDAR, 
-            new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Implementação futura
-                }
+            e -> {
+                // Implementação futura
             }
         );
         menu.add(novoAgendamentoOption);
         
-        // Spacer at bottom
+        // Espaçador no final
         menu.add(Box.createVerticalGlue());
         
         return menu;
     }
     
-    private JPanel createMenuHeader(String text) {
+    /**
+     * Cria um cabeçalho para seção do menu
+     */
+    private JPanel criarCabecalhoMenu(String texto) {
         JPanel header = new JPanel();
         header.setLayout(new BoxLayout(header, BoxLayout.X_AXIS));
         header.setBackground(new Color(30, 30, 60));
         header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         header.setBorder(new EmptyBorder(5, 15, 5, 10));
         
-        JLabel label = new JLabel(text);
+        JLabel label = new JLabel(texto);
         label.setForeground(UIConstants.MENU_HEADER_TEXT);
         label.setFont(UIConstants.MENU_HEADER_FONT);
         
@@ -265,14 +255,17 @@ public class HomePanel extends JPanel {
         return header;
     }
     
-    private JPanel createMenuOption(String text, String iconName, ActionListener action) {
+    /**
+     * Cria uma opção do menu lateral
+     */
+    private JPanel criarOpcaoMenu(String texto, String iconName, ActionListener action) {
         JPanel option = new JPanel();
         option.setLayout(new BoxLayout(option, BoxLayout.X_AXIS));
         option.setBackground(UIConstants.MENU_BACKGROUND);
         option.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         option.setBorder(new EmptyBorder(5, 15, 5, 10));
         
-        JButton button = new JButton(text);
+        JButton button = new JButton(texto);
         button.setForeground(Color.WHITE);
         button.setBackground(UIConstants.MENU_BACKGROUND);
         button.setBorderPainted(false);
@@ -281,7 +274,7 @@ public class HomePanel extends JPanel {
         button.setHorizontalAlignment(SwingConstants.LEFT);
         button.setFont(UIConstants.MENU_ITEM_FONT);
         
-        // Add icon if available
+        // Adicionar ícone se disponível
         ImageIcon icon = IconManager.loadIcon(iconName, 18, 18);
         if (icon != null) {
             button.setIcon(icon);
@@ -292,7 +285,7 @@ public class HomePanel extends JPanel {
         option.add(button);
         option.add(Box.createHorizontalGlue());
         
-        // Add hover effect
+        // Adicionar efeito hover
         option.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 option.setBackground(UIConstants.PRIMARY_LIGHT);
@@ -308,33 +301,63 @@ public class HomePanel extends JPanel {
         return option;
     }
     
-    private void toggleSideMenu() {
+    /**
+     * Alterna a visibilidade do menu lateral
+     */
+    private void alternarMenuLateral() {
         sideMenuVisible = !sideMenuVisible;
         sideMenu.setVisible(sideMenuVisible);
         revalidate();
         repaint();
     }
     
-    private JPanel createDashboardPanel() {
-        JPanel dashboard = new JPanel(new GridBagLayout());
-        UIConstants.setupContentPanel(dashboard);
+    /**
+     * Cria o painel de dashboard
+     */
+    private JPanel criarPainelDashboard() {
+        JPanel dashboard = new JPanel(new BorderLayout());
+        dashboard.setBackground(UIConstants.PANEL_BACKGROUND);
+        dashboard.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
+        HeaderPanel headerPanel = new HeaderPanel("Dashboard");
+        
+        JPanel contentPanel = new JPanel(new java.awt.GridBagLayout());
+        contentPanel.setBackground(UIConstants.PANEL_BACKGROUND);
         
         JLabel lblDashboard = new JLabel("DASHBOARD", SwingConstants.CENTER);
         lblDashboard.setForeground(UIConstants.HIGHLIGHT_TEXT_COLOR);
         lblDashboard.setFont(UIConstants.TITLE_FONT);
         
-        dashboard.add(lblDashboard, gbc);
+        contentPanel.add(lblDashboard);
+        
+        dashboard.add(headerPanel, BorderLayout.NORTH);
+        dashboard.add(contentPanel, BorderLayout.CENTER);
         
         return dashboard;
     }
     
+    /**
+     * Cria o painel de boas-vindas
+     */
+    private JPanel criarPainelBoasVindas() {
+        JPanel welcomePanel = new JPanel();
+        welcomePanel.setBackground(UIConstants.WELCOME_PANEL_BG);
+        welcomePanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(0, 90, 80), 1),
+            new EmptyBorder(8, 15, 8, 15)
+        ));
+        
+        JLabel lblWelcome = new JLabel("Bem-vindo(a), " + usuarioLogado.getNome());
+        lblWelcome.setForeground(Color.WHITE);
+        lblWelcome.setFont(UIConstants.LABEL_FONT);
+        welcomePanel.add(lblWelcome);
+        
+        return welcomePanel;
+    }
+    
+    /**
+     * Mostra o painel de edição de cliente
+     */
     public void mostrarPainelEditarCliente(Cliente cliente) {
         if (editarClientePanel != null) {
             contentContainer.remove(editarClientePanel);
@@ -345,6 +368,9 @@ public class HomePanel extends JPanel {
         contentCardLayout.show(contentContainer, EDITAR_CLIENTE_PANEL);
     }
     
+    /**
+     * Mostra o painel de listagem de clientes
+     */
     public void mostrarPainelClientes() {
         clientesListPanel.carregarClientes();
         contentCardLayout.show(contentContainer, CLIENTES_PANEL);

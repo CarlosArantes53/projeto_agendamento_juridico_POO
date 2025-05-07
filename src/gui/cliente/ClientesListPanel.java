@@ -1,21 +1,15 @@
-package gui;
+package gui.cliente;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,9 +20,15 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import dao.ClienteDAO;
+import gui.MainFrame;
+import gui.common.FormValidator;
+import gui.common.HeaderPanel;
+import gui.common.TableActionListener;
+import gui.util.IconManager;
+import gui.util.TableActionCellEditor;
+import gui.util.TableActionCellRenderer;
+import gui.util.UIConstants;
 import modelo.Cliente;
-import util.IconManager;
-import util.UIConstants;
 
 public class ClientesListPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -45,51 +45,15 @@ public class ClientesListPanel extends JPanel {
         setLayout(new BorderLayout(0, 0));
         setBackground(UIConstants.PANEL_BACKGROUND);
         
-        JPanel headerPanel = createHeaderPanel();
+        // Criar componentes
+        HeaderPanel headerPanel = new HeaderPanel("Clientes Cadastrados");
+        headerPanel.addButton("Adicionar Cliente", IconManager.ICON_ADD, e -> mainFrame.mostrarPainelCadastroCliente());
+        
         JPanel contentPanel = createContentPanel();
         
+        // Adicionar componentes ao painel principal
         add(headerPanel, BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
-    }
-    
-    private JPanel createHeaderPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(UIConstants.PANEL_BACKGROUND);
-        panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, UIConstants.HEADER_BORDER_COLOR),
-            BorderFactory.createEmptyBorder(15, 20, 15, 20)
-        ));
-        
-        // Title section
-        JLabel lblTitle = new JLabel("Clientes Cadastrados");
-        lblTitle.setForeground(UIConstants.TEXT_COLOR);
-        lblTitle.setFont(UIConstants.SUBTITLE_FONT);
-        
-        // Button section
-        JButton btnAdicionar = new JButton("Adicionar Cliente");
-        UIConstants.setupPrimaryButton(btnAdicionar, "Adicionar Cliente");
-        
-        // Add icon to button if available
-        ImageIcon addIcon = IconManager.loadIcon(IconManager.ICON_ADD, 16, 16);
-        if (addIcon != null) {
-            btnAdicionar.setIcon(addIcon);
-        }
-        
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        btnPanel.setBackground(UIConstants.PANEL_BACKGROUND);
-        btnPanel.add(btnAdicionar);
-        
-        btnAdicionar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainFrame.mostrarPainelCadastroCliente();
-            }
-        });
-        
-        panel.add(lblTitle, BorderLayout.WEST);
-        panel.add(btnPanel, BorderLayout.EAST);
-        
-        return panel;
     }
     
     private JPanel createContentPanel() {
@@ -97,7 +61,7 @@ public class ClientesListPanel extends JPanel {
         panel.setBackground(UIConstants.PANEL_BACKGROUND);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         
-        // Create table model
+        // Criar modelo da tabela
         String[] colunas = {"ID", "Nome", "Documento", "Telefone", "E-mail", "Ações"};
         tableModel = new DefaultTableModel(colunas, 0) {
             private static final long serialVersionUID = 1L;
@@ -116,12 +80,12 @@ public class ClientesListPanel extends JPanel {
             }
         };
         
-        // Create and configure table
+        // Criar e configurar tabela
         tblClientes = new JTable(tableModel);
         UIConstants.setupTable(tblClientes);
         tblClientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
-        // Set custom renderer for all cells
+        // Configurar renderer personalizado
         tblClientes.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             private static final long serialVersionUID = 1L;
             
@@ -141,24 +105,24 @@ public class ClientesListPanel extends JPanel {
                     c.setForeground(Color.WHITE);
                 }
                 
-                // Center align the ID column
+                // Centralizar a coluna ID
                 if (column == 0) {
                     setHorizontalAlignment(SwingConstants.CENTER);
-                } else if (column == 5) { // Action column
+                } else if (column == 5) { // Coluna de ações
                     setHorizontalAlignment(SwingConstants.CENTER);
                     c.setBackground(new Color(50, 50, 80));
                 } else {
                     setHorizontalAlignment(SwingConstants.LEFT);
                 }
                 
-                // Add some padding
+                // Adicionar padding
                 setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
                 
                 return c;
             }
         });
         
-        // Set column widths
+        // Configurar larguras das colunas
         TableColumn idColumn = tblClientes.getColumnModel().getColumn(0);
         idColumn.setMaxWidth(60);
         idColumn.setPreferredWidth(60);
@@ -168,7 +132,7 @@ public class ClientesListPanel extends JPanel {
         actionColumn.setPreferredWidth(120);
         actionColumn.setMaxWidth(120);
         
-        // Set action column renderer and editor
+        // Configurar renderer e editor para coluna de ações
         actionColumn.setCellRenderer(new TableActionCellRenderer());
         actionColumn.setCellEditor(new TableActionCellEditor(new TableActionListener() {
             @Override
@@ -182,12 +146,12 @@ public class ClientesListPanel extends JPanel {
             }
         }));
         
-        // Create scroll pane
+        // Criar scroll pane
         JScrollPane scrollPane = new JScrollPane(tblClientes);
         scrollPane.getViewport().setBackground(UIConstants.PANEL_BACKGROUND);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         
-        // Add to panel
+        // Adicionar ao painel
         panel.add(scrollPane, BorderLayout.CENTER);
         
         return panel;
@@ -211,40 +175,48 @@ public class ClientesListPanel extends JPanel {
             }
             
             if (clientes.isEmpty()) {
-                // Show empty state
-                JPanel emptyPanel = new JPanel();
-                emptyPanel.setLayout(new BoxLayout(emptyPanel, BoxLayout.Y_AXIS));
-                emptyPanel.setBackground(UIConstants.PANEL_BACKGROUND);
-                
-                JLabel lblEmpty = new JLabel("Nenhum cliente cadastrado");
-                lblEmpty.setAlignmentX(CENTER_ALIGNMENT);
-                lblEmpty.setForeground(UIConstants.TEXT_SECONDARY);
-                lblEmpty.setFont(UIConstants.SUBTITLE_FONT);
-                
-                JLabel lblSuggestion = new JLabel("Clique em 'Adicionar Cliente' para começar");
-                lblSuggestion.setAlignmentX(CENTER_ALIGNMENT);
-                lblSuggestion.setForeground(UIConstants.TEXT_SECONDARY);
-                lblSuggestion.setFont(UIConstants.LABEL_FONT);
-                
-                emptyPanel.add(Box.createVerticalGlue());
-                emptyPanel.add(lblEmpty);
-                emptyPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-                emptyPanel.add(lblSuggestion);
-                emptyPanel.add(Box.createVerticalGlue());
-                
-                // Remove the table and show the empty state
-                removeAll();
-                add(createHeaderPanel(), BorderLayout.NORTH);
-                add(emptyPanel, BorderLayout.CENTER);
-                revalidate();
-                repaint();
+                // Mostrar estado vazio
+                mostrarEstadoVazio();
             }
             
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Erro ao carregar clientes: " + e.getMessage(), 
-                "Erro", JOptionPane.ERROR_MESSAGE);
+            FormValidator.mostrarErro(this, "Erro ao carregar clientes: " + e.getMessage());
         }
+    }
+    
+    private void mostrarEstadoVazio() {
+        // Criar painel de estado vazio
+        JPanel emptyPanel = new JPanel();
+        emptyPanel.setLayout(new BoxLayout(emptyPanel, BoxLayout.Y_AXIS));
+        emptyPanel.setBackground(UIConstants.PANEL_BACKGROUND);
+        
+        JLabel lblEmpty = new JLabel("Nenhum cliente cadastrado");
+        lblEmpty.setAlignmentX(CENTER_ALIGNMENT);
+        lblEmpty.setForeground(UIConstants.TEXT_SECONDARY);
+        lblEmpty.setFont(UIConstants.SUBTITLE_FONT);
+        
+        JLabel lblSuggestion = new JLabel("Clique em 'Adicionar Cliente' para começar");
+        lblSuggestion.setAlignmentX(CENTER_ALIGNMENT);
+        lblSuggestion.setForeground(UIConstants.TEXT_SECONDARY);
+        lblSuggestion.setFont(UIConstants.LABEL_FONT);
+        
+        emptyPanel.add(Box.createVerticalGlue());
+        emptyPanel.add(lblEmpty);
+        emptyPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        emptyPanel.add(lblSuggestion);
+        emptyPanel.add(Box.createVerticalGlue());
+        
+        // Remover a tabela e mostrar o estado vazio
+        removeAll();
+        
+        // Recriar cabeçalho
+        HeaderPanel headerPanel = new HeaderPanel("Clientes Cadastrados");
+        headerPanel.addButton("Adicionar Cliente", IconManager.ICON_ADD, e -> mainFrame.mostrarPainelCadastroCliente());
+        
+        add(headerPanel, BorderLayout.NORTH);
+        add(emptyPanel, BorderLayout.CENTER);
+        revalidate();
+        repaint();
     }
     
     private void editarCliente(int row) {
@@ -256,9 +228,7 @@ public class ClientesListPanel extends JPanel {
                 mainFrame.mostrarPainelEditarCliente(cliente);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Erro ao buscar cliente: " + e.getMessage(), 
-                "Erro", JOptionPane.ERROR_MESSAGE);
+            FormValidator.mostrarErro(this, "Erro ao buscar cliente: " + e.getMessage());
         }
     }
     
@@ -266,43 +236,28 @@ public class ClientesListPanel extends JPanel {
         int idCliente = (int) tableModel.getValueAt(row, 0);
         String nomeCliente = (String) tableModel.getValueAt(row, 1);
         
-        int confirma = JOptionPane.showConfirmDialog(
-            this,
-            "Tem certeza que deseja excluir o cliente '" + nomeCliente + "'?",
-            "Confirmar Exclusão",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
-        );
-        
-        if (confirma == JOptionPane.YES_OPTION) {
+        // Confirmar exclusão
+        if (FormValidator.confirmar(this,
+                "Tem certeza que deseja excluir o cliente '" + nomeCliente + "'?",
+                "Confirmar Exclusão")) {
+            
             try {
                 boolean sucesso = clienteDAO.excluir(idCliente);
                 
                 if (sucesso) {
                     tableModel.removeRow(row);
-                    JOptionPane.showMessageDialog(this, 
-                        "Cliente excluído com sucesso!", 
-                        "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    FormValidator.mostrarSucesso(this, "Cliente excluído com sucesso!");
                     
-                    // Check if we need to show the empty state
+                    // Verificar se precisamos mostrar o estado vazio
                     if (tableModel.getRowCount() == 0) {
                         carregarClientes();
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, 
-                        "Erro ao excluir cliente!", 
-                        "Erro", JOptionPane.ERROR_MESSAGE);
+                    FormValidator.mostrarErro(this, "Erro ao excluir cliente!");
                 }
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, 
-                    "Erro ao excluir cliente: " + e.getMessage(), 
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+                FormValidator.mostrarErro(this, "Erro ao excluir cliente: " + e.getMessage());
             }
         }
-    }
-    
-    interface TableActionListener {
-        void onEdit(int row);
-        void onDelete(int row);
     }
 }

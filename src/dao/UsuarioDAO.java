@@ -1,154 +1,91 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
+import dao.base.BaseDAO;
 import modelo.Usuario;
 import modelo.Usuario.TipoUsuario;
 
-public class UsuarioDAO {
+public class UsuarioDAO extends BaseDAO {
  
     public int inserir(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO usuarios (nome, email, senha, telefone, tipo_usuario) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO usuarios (nome, email, senha, telefone, tipo_usuario) " +
+                     "VALUES (?, ?, ?, ?, ?)";
         
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        int idGerado = -1;
-        
-        try {
-            conn = ConexaoDB.getConnection();
-            stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            
+        return executeInsert(sql, stmt -> {
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getSenha());
             stmt.setString(4, usuario.getTelefone());
             stmt.setString(5, usuario.getTipoUsuario().toString());
-            
-            int linhasAfetadas = stmt.executeUpdate();
-            
-            if (linhasAfetadas > 0) {
-                rs = stmt.getGeneratedKeys();
-                if (rs.next()) {
-                    idGerado = rs.getInt(1);
-                    usuario.setId(idGerado);
-                }
-            }
-            
-            return idGerado;
-        } finally {
-            if (rs != null) rs.close();
-            if (stmt != null) stmt.close();
-            ConexaoDB.closeConnection(conn);
-        }
+        });
     }
     
     public boolean emailExiste(String email) throws SQLException {
         String sql = "SELECT COUNT(*) FROM usuarios WHERE email = ?";
         
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        
-        try {
-            conn = ConexaoDB.getConnection();
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
-            
-            rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
+        return executeQuery(sql, 
+            stmt -> stmt.setString(1, email),
+            rs -> {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+                return false;
             }
-            
-            return false;
-        } finally {
-            if (rs != null) rs.close();
-            if (stmt != null) stmt.close();
-            ConexaoDB.closeConnection(conn);
-        }
+        );
     }
     
     public Usuario autenticar(String email, String senha) throws SQLException {
         String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
         
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        
-        try {
-            conn = ConexaoDB.getConnection();
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
-            stmt.setString(2, senha);
-            
-            rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                Usuario usuario = new Usuario();
-                usuario.setId(rs.getInt("id"));
-                usuario.setNome(rs.getString("nome"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setSenha(rs.getString("senha"));
-                usuario.setTelefone(rs.getString("telefone"));
-                usuario.setTipoUsuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
-                
-                return usuario;
+        return executeQuery(sql, 
+            stmt -> {
+                stmt.setString(1, email);
+                stmt.setString(2, senha);
+            },
+            rs -> {
+                if (rs.next()) {
+                    return mapearUsuario(rs);
+                }
+                return null;
             }
-            
-            return null;
-        } finally {
-            if (rs != null) rs.close();
-            if (stmt != null) stmt.close();
-            ConexaoDB.closeConnection(conn);
-        }
+        );
     }
     
-    // Novo método para atualização de senha
     public boolean atualizarSenha(String email, String novaSenha) throws SQLException {
         String sql = "UPDATE usuarios SET senha = ? WHERE email = ?";
         
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        
-        try {
-            conn = ConexaoDB.getConnection();
-            stmt = conn.prepareStatement(sql);
+        int linhasAfetadas = executeUpdate(sql, stmt -> {
             stmt.setString(1, novaSenha);
             stmt.setString(2, email);
-            
-            int linhasAfetadas = stmt.executeUpdate();
-            return linhasAfetadas > 0;
-        } finally {
-            if (stmt != null) stmt.close();
-            ConexaoDB.closeConnection(conn);
-        }
+        });
+        
+        return linhasAfetadas > 0;
     }
     
-    // Novo método para atualização do perfil do usuário
     public boolean atualizarPerfil(Usuario usuario) throws SQLException {
         String sql = "UPDATE usuarios SET nome = ?, email = ?, telefone = ?, tipo_usuario = ? WHERE id = ?";
         
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        
-        try {
-            conn = ConexaoDB.getConnection();
-            stmt = conn.prepareStatement(sql);
+        int linhasAfetadas = executeUpdate(sql, stmt -> {
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getTelefone());
             stmt.setString(4, usuario.getTipoUsuario().toString());
             stmt.setInt(5, usuario.getId());
-            
-            int linhasAfetadas = stmt.executeUpdate();
-            return linhasAfetadas > 0;
-        } finally {
-            if (stmt != null) stmt.close();
-            ConexaoDB.closeConnection(conn);
-        }
+        });
+        
+        return linhasAfetadas > 0;
+    }
+    
+    private Usuario mapearUsuario(ResultSet rs) throws SQLException {
+        Usuario usuario = new Usuario();
+        usuario.setId(rs.getInt("id"));
+        usuario.setNome(rs.getString("nome"));
+        usuario.setEmail(rs.getString("email"));
+        usuario.setSenha(rs.getString("senha"));
+        usuario.setTelefone(rs.getString("telefone"));
+        usuario.setTipoUsuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
+        return usuario;
     }
 }

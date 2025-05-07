@@ -1,19 +1,29 @@
-package util;
+package gui.util;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.Border;
-import javax.swing.BorderFactory;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.JTableHeader;
 
+/**
+ * Classe de constantes e utilitários para UI
+ * Centraliza definições de estilos visuais da aplicação
+ */
 public class UIConstants {
+    
+    //--------------------------------------------------------------------------
+    // CONSTANTES DE CORES
+    //--------------------------------------------------------------------------
+    
     // Esquema de cores principal
     public static final Color PRIMARY_DARK = new Color(25, 25, 55);
     public static final Color PRIMARY = new Color(45, 45, 80);
@@ -57,7 +67,10 @@ public class UIConstants {
     public static final Color WARNING_BUTTON_HOVER = new Color(250, 160, 0);
     public static final Color BUTTON_TEXT_COLOR = Color.BLACK;
     
-    // Fontes
+    //--------------------------------------------------------------------------
+    // CONSTANTES DE FONTES
+    //--------------------------------------------------------------------------
+    
     public static final Font TITLE_FONT = new Font("Segoe UI", Font.BOLD, 18);
     public static final Font SUBTITLE_FONT = new Font("Segoe UI", Font.BOLD, 16);
     public static final Font LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 14);
@@ -67,7 +80,10 @@ public class UIConstants {
     public static final Font MENU_HEADER_FONT = new Font("Segoe UI", Font.BOLD, 12);
     public static final Font MENU_ITEM_FONT = new Font("Segoe UI", Font.PLAIN, 14);
     
-    // Padding e margens
+    //--------------------------------------------------------------------------
+    // CONSTANTES DE DIMENSÕES E ESPAÇAMENTOS
+    //--------------------------------------------------------------------------
+    
     public static final int PADDING = 15;
     public static final EmptyBorder PANEL_PADDING = new EmptyBorder(PADDING, PADDING, PADDING, PADDING);
     public static final EmptyBorder CONTENT_PADDING = new EmptyBorder(10, 10, 10, 10);
@@ -76,89 +92,69 @@ public class UIConstants {
         new EmptyBorder(10, 10, 10, 10)
     );
     
-    // Dimensões padrão
     public static final Dimension BUTTON_DIMENSION = new Dimension(120, 32);
     public static final Dimension ICON_BUTTON_DIMENSION = new Dimension(32, 32);
     public static final Dimension MENU_WIDTH = new Dimension(220, 0);
     public static final int TABLE_ROW_HEIGHT = 40;
     
-// Estilo da tabela
-public static final Color TABLE_HEADER_BG = PRIMARY_DARK;
-public static final Color TABLE_HEADER_FG = Color.BLACK;
+    // Estilo da tabela
+    public static final Color TABLE_HEADER_BG = PRIMARY_DARK;
+    public static final Color TABLE_HEADER_FG = Color.WHITE;
     
+    //--------------------------------------------------------------------------
+    // MÉTODOS UTILITÁRIOS PARA CONFIGURAÇÃO DE COMPONENTES
+    //--------------------------------------------------------------------------
+    
+    /**
+     * Configura um painel com as cores e bordas padrão
+     */
     public static void setupPanel(JPanel panel) {
         panel.setBackground(BACKGROUND_COLOR);
         panel.setBorder(PANEL_PADDING);
     }
     
+    /**
+     * Configura um painel de conteúdo com as cores e bordas padrão
+     */
     public static void setupContentPanel(JPanel panel) {
         panel.setBackground(PANEL_BACKGROUND);
         panel.setBorder(PANEL_BORDER);
     }
     
+    /**
+     * Configura um botão primário (ação principal)
+     */
     public static void setupPrimaryButton(JButton button, String text) {
-        button.setText(text);
-        button.setBackground(PRIMARY_BUTTON_COLOR);
-        button.setForeground(BUTTON_TEXT_COLOR);
-        button.setFont(BUTTON_FONT);
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        button.setPreferredSize(BUTTON_DIMENSION);
-        
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(PRIMARY_BUTTON_HOVER);
-            }
-            
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(PRIMARY_BUTTON_COLOR);
-            }
-        });
+        setupButton(button, text, PRIMARY_BUTTON_COLOR, PRIMARY_BUTTON_HOVER);
     }
     
+    /**
+     * Configura um botão secundário (ações alternativas)
+     */
     public static void setupSecondaryButton(JButton button, String text) {
-        button.setText(text);
-        button.setBackground(SECONDARY_BUTTON_COLOR);
-        button.setForeground(BUTTON_TEXT_COLOR);
-        button.setFont(BUTTON_FONT);
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        button.setPreferredSize(BUTTON_DIMENSION);
-        
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(SECONDARY_BUTTON_HOVER);
-            }
-            
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(SECONDARY_BUTTON_COLOR);
-            }
-        });
+        setupButton(button, text, SECONDARY_BUTTON_COLOR, SECONDARY_BUTTON_HOVER);
     }
     
+    /**
+     * Configura um botão de perigo (exclusão, cancelamento)
+     */
     public static void setupDangerButton(JButton button, String text) {
-        button.setText(text);
-        button.setBackground(DANGER_BUTTON_COLOR);
-        button.setForeground(BUTTON_TEXT_COLOR);
-        button.setFont(BUTTON_FONT);
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        button.setPreferredSize(BUTTON_DIMENSION);
-        
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(DANGER_BUTTON_HOVER);
-            }
-            
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(DANGER_BUTTON_COLOR);
-            }
-        });
+        setupButton(button, text, DANGER_BUTTON_COLOR, DANGER_BUTTON_HOVER);
     }
     
+    /**
+     * Configura um botão de aviso (ações que requerem atenção)
+     */
     public static void setupWarningButton(JButton button, String text) {
+        setupButton(button, text, WARNING_BUTTON_COLOR, WARNING_BUTTON_HOVER);
+    }
+    
+    /**
+     * Método interno para configuração base de botões
+     */
+    private static void setupButton(JButton button, String text, Color bgColor, Color hoverColor) {
         button.setText(text);
-        button.setBackground(WARNING_BUTTON_COLOR);
+        button.setBackground(bgColor);
         button.setForeground(BUTTON_TEXT_COLOR);
         button.setFont(BUTTON_FONT);
         button.setFocusPainted(false);
@@ -167,15 +163,18 @@ public static final Color TABLE_HEADER_FG = Color.BLACK;
         
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(WARNING_BUTTON_HOVER);
+                button.setBackground(hoverColor);
             }
             
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(WARNING_BUTTON_COLOR);
+                button.setBackground(bgColor);
             }
         });
     }
     
+    /**
+     * Configura um botão de ícone (sem texto, apenas ícone)
+     */
     public static void setupIconButton(JButton button, String tooltip) {
         button.setToolTipText(tooltip);
         button.setBackground(PANEL_BACKGROUND);
@@ -187,30 +186,45 @@ public static final Color TABLE_HEADER_FG = Color.BLACK;
         button.setPreferredSize(ICON_BUTTON_DIMENSION);
     }
     
+    /**
+     * Configura um label de título
+     */
     public static void setupTitleLabel(JLabel label, String text) {
         label.setText(text);
         label.setFont(TITLE_FONT);
         label.setForeground(TEXT_COLOR);
     }
     
+    /**
+     * Configura um label de subtítulo
+     */
     public static void setupSubtitleLabel(JLabel label, String text) {
         label.setText(text);
         label.setFont(SUBTITLE_FONT);
         label.setForeground(TEXT_COLOR);
     }
     
+    /**
+     * Configura um label padrão
+     */
     public static void setupLabel(JLabel label, String text) {
         label.setText(text);
         label.setFont(LABEL_FONT);
         label.setForeground(TEXT_COLOR);
     }
     
+    /**
+     * Configura um label secundário (texto menos importante)
+     */
     public static void setupSecondaryLabel(JLabel label, String text) {
         label.setText(text);
         label.setFont(LABEL_FONT);
         label.setForeground(TEXT_SECONDARY);
     }
     
+    /**
+     * Configura um radio button
+     */
     public static void setupRadioButton(JRadioButton radioButton, String text) {
         radioButton.setText(text);
         radioButton.setFont(LABEL_FONT);
@@ -218,6 +232,9 @@ public static final Color TABLE_HEADER_FG = Color.BLACK;
         radioButton.setBackground(BACKGROUND_COLOR);
     }
     
+    /**
+     * Configura uma tabela com o estilo padrão da aplicação
+     */
     public static void setupTable(JTable table) {
         table.setRowHeight(TABLE_ROW_HEIGHT);
         table.setFont(TABLE_FONT);

@@ -1,10 +1,10 @@
-package dao;
+package config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConexaoDB {
+public class DatabaseConfig {
     
     private static final String URL = "jdbc:mysql://localhost:3306/advocacia_mvp";
     private static final String USUARIO = "root";

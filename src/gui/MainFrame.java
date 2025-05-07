@@ -3,9 +3,17 @@ package gui;
 import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import gui.cliente.CadastroClientePanel;
+import gui.usuario.CadastroUsuarioPanel;
+import gui.usuario.EditarPerfilPanel;
+import gui.usuario.LoginPanel;
+import gui.usuario.RecuperarSenhaPanel;
 import modelo.Cliente;
 import modelo.Usuario;
-import util.UIConstants;
+import gui.util.UIConstants;
 
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -30,6 +38,8 @@ public class MainFrame extends JFrame {
     private Usuario usuarioLogado;
     
     public MainFrame() {
+        configurarAparencia();
+        
         setTitle("HERMES - Sistema de Agendamentos Jurídicos");
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,6 +58,14 @@ public class MainFrame extends JFrame {
         cardLayout.show(contentPane, LOGIN_PANEL);
         
         setContentPane(contentPane);
+    }
+    
+    private void configurarAparencia() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
     
     private void inicializarPaineis() {
@@ -112,13 +130,5 @@ public class MainFrame extends JFrame {
     public void fazerLogout() {
         this.usuarioLogado = null;
         mostrarPainel(LOGIN_PANEL);
-    }
-    
-    public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame().setVisible(true);
-            }
-        });
     }
 }
