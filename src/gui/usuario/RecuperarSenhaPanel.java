@@ -31,18 +31,14 @@ public class RecuperarSenhaPanel extends JPanel {
         UIConstants.setupPanel(this);
         setLayout(new BorderLayout());
         
-        // Formulário principal
         FormPanel formPanel = new FormPanel();
         
-        // Título
         formPanel.addTitle("Recuperação de Senha");
         
-        // Campos de texto
         txtEmail = formPanel.addTextField("E-mail:", null);
         txtNovaSenha = formPanel.addPasswordField("Nova Senha:");
         txtConfirmarSenha = formPanel.addPasswordField("Confirmar Senha:");
         
-        // Painel de botões
         ActionPanel actionPanel = new ActionPanel();
         
         actionPanel.addPrimaryButton("Atualizar Senha", this::atualizarSenha);
@@ -58,34 +54,28 @@ public class RecuperarSenhaPanel extends JPanel {
     private void atualizarSenha(ActionEvent e) {
         String email = txtEmail.getText().trim();
         String novaSenha = new String(txtNovaSenha.getPassword());
-        // Validar campos obrigatórios
         if (!FormValidator.camposObrigatorios(this, txtEmail, txtNovaSenha, txtConfirmarSenha)) {
             return;
         }
         
-        // Validar formato de email
         if (!FormValidator.validarEmail(this, txtEmail)) {
             return;
         }
         
-        // Validar senhas iguais
         if (!FormValidator.validarSenhasIguais(this, txtNovaSenha, txtConfirmarSenha)) {
             return;
         }
         
-        // Validar formato de senha
         if (!FormValidator.validarSenha(this, txtNovaSenha)) {
             return;
         }
         
         try {
-            // Verificar se email existe
             if (!usuarioDAO.emailExiste(email)) {
                 FormValidator.mostrarErro(this, "E-mail não encontrado no sistema!");
                 return;
             }
             
-            // Atualizar senha
             boolean sucesso = usuarioDAO.atualizarSenha(email, novaSenha);
             
             if (sucesso) {

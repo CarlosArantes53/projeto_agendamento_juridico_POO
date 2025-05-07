@@ -11,7 +11,7 @@ import javax.swing.JComponent;
 
 public class IconManager {
     
-    private static final String ICON_PATH = "src/gui/icons/";
+    private static final String ICON_PATH = "src/gui/images/icons/";
     
     public static final String ICON_MENU = "menu.png";
     public static final String ICON_PROFILE = "profile.png";
@@ -76,9 +76,9 @@ public class IconManager {
     public static boolean setButtonIcon(Component button, String iconName, int width, int height) {
         ImageIcon icon = loadIcon(iconName, width, height);
         
-        if (icon != null) {
-            AbstractButton component = null;
-            component.setIcon(icon);
+        if (icon != null && button instanceof AbstractButton) {
+            AbstractButton abstractButton = (AbstractButton) button;
+            abstractButton.setIcon(icon);
             return true;
         }
         
@@ -88,5 +88,4 @@ public class IconManager {
     public static boolean setButtonIcon(JButton button, String iconName) {
         return setButtonIcon(button, iconName, 16, 16);
     }
-
 }

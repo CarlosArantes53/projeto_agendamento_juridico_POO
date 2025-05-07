@@ -39,23 +39,20 @@ public class CadastroUsuarioPanel extends JPanel {
         setBackground(UIConstants.BACKGROUND_COLOR);
         setLayout(new BorderLayout());
         
-        // Formulário principal
+        
         FormPanel formPanel = new FormPanel();
         
-        // Título
+        
         formPanel.addTitle("Cadastro de novo usuário");
         
-        // Campos de texto
         txtNome = formPanel.addTextField("Nome Completo:", null);
         txtEmail = formPanel.addTextField("E-mail:", null);
         txtSenha = formPanel.addPasswordField("Senha:");
         txtTelefone = formPanel.addTextField("Telefone:", null);
-        
-        // Tipo de usuário
+
         JPanel tipoUsuarioPanel = criarPainelTipoUsuario();
         formPanel.addComponent("Tipo de Usuário:", tipoUsuarioPanel);
         
-        // Painel de botões
         ActionPanel actionPanel = new ActionPanel();
         
         actionPanel.addPrimaryButton("Cadastrar", this::cadastrarUsuario);
@@ -97,34 +94,28 @@ public class CadastroUsuarioPanel extends JPanel {
         String telefone = txtTelefone.getText().trim();
         TipoUsuario tipoUsuario = rdbAdvogado.isSelected() ? TipoUsuario.ADVOGADO : TipoUsuario.SECRETARIO;
         
-        // Validar campos obrigatórios
         if (!FormValidator.camposObrigatorios(this, txtNome, txtEmail, txtSenha, txtTelefone)) {
             return;
         }
         
-        // Validar formato de email
         if (!FormValidator.validarEmail(this, txtEmail)) {
             return;
         }
         
-        // Validar senha
         if (!FormValidator.validarSenha(this, txtSenha)) {
             return;
         }
         
-        // Validar telefone
         if (!FormValidator.validarTelefone(this, txtTelefone)) {
             return;
         }
         
         try {
-            // Verificar se email já existe
             if (usuarioDAO.emailExiste(email)) {
                 FormValidator.mostrarErro(this, "Este e-mail já está cadastrado no sistema!");
                 return;
             }
             
-            // Criar e inserir usuário
             Usuario usuario = new Usuario(nome, email, senha, telefone, tipoUsuario);
             
             int idGerado = usuarioDAO.inserir(usuario);

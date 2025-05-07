@@ -33,7 +33,6 @@ public abstract class BaseDAO {
         DatabaseConfig.closeConnection(conn);
     }
     
-    // Método genérico para executar consultas SQL
     protected <T> T executeQuery(String sql, PreparedStatementSetter setter, 
                               ResultSetMapper<T> mapper) throws SQLException {
         Connection conn = null;
@@ -56,7 +55,6 @@ public abstract class BaseDAO {
         }
     }
     
-    // Método genérico para executar updates SQL
     protected int executeUpdate(String sql, PreparedStatementSetter setter) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -75,7 +73,6 @@ public abstract class BaseDAO {
         }
     }
     
-    // Método genérico para inserir e obter a chave gerada
     protected int executeInsert(String sql, PreparedStatementSetter setter) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -104,8 +101,7 @@ public abstract class BaseDAO {
             closeResources(conn, stmt, rs);
         }
     }
-    
-    // Interfaces funcionais para parametrização e mapeamento
+     
     @FunctionalInterface
     protected interface PreparedStatementSetter {
         void setParameters(PreparedStatement stmt) throws SQLException;
@@ -116,7 +112,6 @@ public abstract class BaseDAO {
         T map(ResultSet rs) throws SQLException;
     }
     
-    // Método utilitário para mapear um ResultSet para uma lista
     protected <T> List<T> mapList(ResultSet rs, Function<ResultSet, T> mapper) throws SQLException {
         List<T> list = new ArrayList<>();
         while (rs.next()) {

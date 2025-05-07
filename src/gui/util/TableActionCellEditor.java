@@ -11,10 +11,6 @@ import javax.swing.table.TableCellEditor;
 
 import gui.common.TableActionListener;
 
-/**
- * Editor personalizado para células de ação em tabelas.
- * Permite a interação com botões de edição e exclusão em células de tabela.
- */
 public class TableActionCellEditor extends AbstractCellEditor implements TableCellEditor {
     private static final long serialVersionUID = 1L;
     
@@ -23,23 +19,11 @@ public class TableActionCellEditor extends AbstractCellEditor implements TableCe
     private JButton btnDelete;
     private JButton btnView;
     private int row;
-    /**
-     * Construtor para editor com botões de editar e excluir
-     * 
-     * @param listener O listener que receberá as ações
-     */
+
     public TableActionCellEditor(TableActionListener listener) {
         this(listener, true, true, false);
     }
     
-    /**
-     * Construtor que permite personalizar quais botões serão exibidos
-     * 
-     * @param listener O listener que receberá as ações
-     * @param showEdit Exibir botão de edição
-     * @param showDelete Exibir botão de exclusão
-     * @param showView Exibir botão de visualização
-     */
     public TableActionCellEditor(TableActionListener listener, 
             boolean showEdit, boolean showDelete, boolean showView) {
         
@@ -74,9 +58,6 @@ public class TableActionCellEditor extends AbstractCellEditor implements TableCe
         }
     }
     
-    /**
-     * Cria um botão com ícone para o painel de ações
-     */
     private JButton createButton(String iconName, String tooltip, java.awt.Color fallbackColor) {
         JButton button = new JButton();
         IconManager.setupIconButton(button, iconName, tooltip, 28);
@@ -84,7 +65,6 @@ public class TableActionCellEditor extends AbstractCellEditor implements TableCe
         if (button.getIcon() == null) {
             UIConstants.setupIconButton(button, tooltip);
             
-            // Definir símbolo e cor de fallback se o ícone não estiver disponível
             if (tooltip.equals("Editar")) {
                 button.setText("✎");
             } else if (tooltip.equals("Excluir")) {
@@ -105,7 +85,6 @@ public class TableActionCellEditor extends AbstractCellEditor implements TableCe
         
         this.row = row;
         
-        // Definir a cor de fundo apropriada
         if (isSelected) {
             panel.setBackground(UIConstants.ROW_SELECTED);
         } else {

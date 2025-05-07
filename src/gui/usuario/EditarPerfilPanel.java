@@ -39,22 +39,17 @@ public class EditarPerfilPanel extends JPanel {
         UIConstants.setupPanel(this);
         setLayout(new BorderLayout());
         
-        // Formulário principal
         FormPanel formPanel = new FormPanel();
         
-        // Título
         formPanel.addTitle("Editar Perfil");
         
-        // Campos de texto
         txtNome = formPanel.addTextField("Nome Completo:", usuarioLogado.getNome());
         txtEmail = formPanel.addTextField("E-mail:", usuarioLogado.getEmail());
         txtTelefone = formPanel.addTextField("Telefone:", usuarioLogado.getTelefone());
         
-        // Tipo de usuário
         JPanel tipoUsuarioPanel = criarPainelTipoUsuario();
         formPanel.addComponent("Tipo de Usuário:", tipoUsuarioPanel);
         
-        // Painel de botões
         ActionPanel actionPanel = new ActionPanel();
         
         actionPanel.addPrimaryButton("Salvar Alterações", this::salvarAlteracoes);
@@ -96,29 +91,29 @@ public class EditarPerfilPanel extends JPanel {
         String telefone = txtTelefone.getText().trim();
         TipoUsuario tipoUsuario = rdbAdvogado.isSelected() ? TipoUsuario.ADVOGADO : TipoUsuario.SECRETARIO;
         
-        // Validar campos obrigatórios
+        
         if (!FormValidator.camposObrigatorios(this, txtNome, txtEmail, txtTelefone)) {
             return;
         }
         
-        // Validar formato de email
+        
         if (!FormValidator.validarEmail(this, txtEmail)) {
             return;
         }
         
-        // Validar formato de telefone
+        
         if (!FormValidator.validarTelefone(this, txtTelefone)) {
             return;
         }
         
         try {
-            // Verificar se o novo email já existe para outro usuário
+            
             if (!email.equals(usuarioLogado.getEmail()) && usuarioDAO.emailExiste(email)) {
                 FormValidator.mostrarErro(this, "Este e-mail já está cadastrado no sistema!");
                 return;
             }
             
-            // Atualizar os dados do usuário
+            
             usuarioLogado.setNome(nome);
             usuarioLogado.setEmail(email);
             usuarioLogado.setTelefone(telefone);

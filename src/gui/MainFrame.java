@@ -118,8 +118,16 @@ public class MainFrame extends JFrame {
     }
     
     public void voltarParaHome() {
+        voltarParaHome(false);
+    }
+    
+    public void voltarParaHome(boolean mostrarClientes) {
         if (homePanel != null) {
             cardLayout.show(contentPane, HOME_PANEL);
+            
+            if (mostrarClientes) {
+                homePanel.mostrarPainelClientes();
+            }
         }
     }
     

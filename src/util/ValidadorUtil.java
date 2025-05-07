@@ -54,14 +54,11 @@ public class ValidadorUtil {
             return false;
         }
         
-        // Remove caracteres não numéricos
         String numerosApenas = documento.replaceAll("[^0-9]", "");
         
-        // Verifica se é CPF (11 dígitos)
         if (numerosApenas.length() == 11) {
             return validarCPF(numerosApenas);
         } 
-        // Verifica se é CNPJ (14 dígitos)
         else if (numerosApenas.length() == 14) {
             return validarCNPJ(numerosApenas);
         }
@@ -70,7 +67,6 @@ public class ValidadorUtil {
     }
 
     private static boolean validarCPF(String cpf) {
-        // Verifica CPFs conhecidos inválidos
         if (cpf.equals("00000000000") || cpf.equals("11111111111") ||
             cpf.equals("22222222222") || cpf.equals("33333333333") ||
             cpf.equals("44444444444") || cpf.equals("55555555555") ||
@@ -79,7 +75,6 @@ public class ValidadorUtil {
             return false;
         }
         
-        // Verifica o primeiro dígito verificador
         int soma = 0;
         for (int i = 0; i < 9; i++) {
             soma += (cpf.charAt(i) - '0') * (10 - i);
@@ -92,7 +87,6 @@ public class ValidadorUtil {
             return false;
         }
         
-        // Verifica o segundo dígito verificador
         soma = 0;
         for (int i = 0; i < 10; i++) {
             soma += (cpf.charAt(i) - '0') * (11 - i);
@@ -105,7 +99,6 @@ public class ValidadorUtil {
     }
 
     private static boolean validarCNPJ(String cnpj) {
-        // Verifica CNPJs conhecidos inválidos
         if (cnpj.equals("00000000000000") || cnpj.equals("11111111111111") ||
             cnpj.equals("22222222222222") || cnpj.equals("33333333333333") ||
             cnpj.equals("44444444444444") || cnpj.equals("55555555555555") ||
@@ -114,7 +107,6 @@ public class ValidadorUtil {
             return false;
         }
         
-        // Verifica o primeiro dígito verificador
         int soma = 0;
         int peso = 2;
         
@@ -130,7 +122,6 @@ public class ValidadorUtil {
             return false;
         }
         
-        // Verifica o segundo dígito verificador
         soma = 0;
         peso = 2;
         

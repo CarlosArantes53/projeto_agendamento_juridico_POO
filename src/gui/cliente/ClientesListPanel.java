@@ -44,14 +44,12 @@ public class ClientesListPanel extends JPanel {
         
         setLayout(new BorderLayout(0, 0));
         setBackground(UIConstants.PANEL_BACKGROUND);
-        
-        // Criar componentes
-        HeaderPanel headerPanel = new HeaderPanel("Clientes Cadastrados");
-        headerPanel.addButton("Adicionar Cliente", IconManager.ICON_ADD, e -> mainFrame.mostrarPainelCadastroCliente());
+         
+        HeaderPanel headerPanel = new HeaderPanel("Cadastro de clientes");
+        headerPanel.addButton("Adicionar", IconManager.ICON_ADD, e -> mainFrame.mostrarPainelCadastroCliente());
         
         JPanel contentPanel = createContentPanel();
-        
-        // Adicionar componentes ao painel principal
+         
         add(headerPanel, BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
     }
@@ -61,14 +59,13 @@ public class ClientesListPanel extends JPanel {
         panel.setBackground(UIConstants.PANEL_BACKGROUND);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         
-        // Criar modelo da tabela
-        String[] colunas = {"ID", "Nome", "Documento", "Telefone", "E-mail", "Ações"};
+        String[] colunas = {"ID", "Nome", "Documento", "Telefone", "E-mail", ""};
         tableModel = new DefaultTableModel(colunas, 0) {
             private static final long serialVersionUID = 1L;
             
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 5; // Apenas a coluna de ações é editável
+                return column == 5;
             }
             
             @Override
@@ -80,12 +77,10 @@ public class ClientesListPanel extends JPanel {
             }
         };
         
-        // Criar e configurar tabela
         tblClientes = new JTable(tableModel);
         UIConstants.setupTable(tblClientes);
         tblClientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
-        // Configurar renderer personalizado
         tblClientes.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             private static final long serialVersionUID = 1L;
             
@@ -105,24 +100,21 @@ public class ClientesListPanel extends JPanel {
                     c.setForeground(Color.WHITE);
                 }
                 
-                // Centralizar a coluna ID
                 if (column == 0) {
                     setHorizontalAlignment(SwingConstants.CENTER);
-                } else if (column == 5) { // Coluna de ações
+                } else if (column == 5) {
                     setHorizontalAlignment(SwingConstants.CENTER);
                     c.setBackground(new Color(50, 50, 80));
                 } else {
                     setHorizontalAlignment(SwingConstants.LEFT);
                 }
                 
-                // Adicionar padding
                 setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
                 
                 return c;
             }
         });
         
-        // Configurar larguras das colunas
         TableColumn idColumn = tblClientes.getColumnModel().getColumn(0);
         idColumn.setMaxWidth(60);
         idColumn.setPreferredWidth(60);
@@ -132,7 +124,6 @@ public class ClientesListPanel extends JPanel {
         actionColumn.setPreferredWidth(120);
         actionColumn.setMaxWidth(120);
         
-        // Configurar renderer e editor para coluna de ações
         actionColumn.setCellRenderer(new TableActionCellRenderer());
         actionColumn.setCellEditor(new TableActionCellEditor(new TableActionListener() {
             @Override
@@ -146,12 +137,10 @@ public class ClientesListPanel extends JPanel {
             }
         }));
         
-        // Criar scroll pane
         JScrollPane scrollPane = new JScrollPane(tblClientes);
         scrollPane.getViewport().setBackground(UIConstants.PANEL_BACKGROUND);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         
-        // Adicionar ao painel
         panel.add(scrollPane, BorderLayout.CENTER);
         
         return panel;
@@ -175,7 +164,6 @@ public class ClientesListPanel extends JPanel {
             }
             
             if (clientes.isEmpty()) {
-                // Mostrar estado vazio
                 mostrarEstadoVazio();
             }
             
@@ -185,7 +173,6 @@ public class ClientesListPanel extends JPanel {
     }
     
     private void mostrarEstadoVazio() {
-        // Criar painel de estado vazio
         JPanel emptyPanel = new JPanel();
         emptyPanel.setLayout(new BoxLayout(emptyPanel, BoxLayout.Y_AXIS));
         emptyPanel.setBackground(UIConstants.PANEL_BACKGROUND);
@@ -206,10 +193,8 @@ public class ClientesListPanel extends JPanel {
         emptyPanel.add(lblSuggestion);
         emptyPanel.add(Box.createVerticalGlue());
         
-        // Remover a tabela e mostrar o estado vazio
         removeAll();
         
-        // Recriar cabeçalho
         HeaderPanel headerPanel = new HeaderPanel("Clientes Cadastrados");
         headerPanel.addButton("Adicionar Cliente", IconManager.ICON_ADD, e -> mainFrame.mostrarPainelCadastroCliente());
         
@@ -236,7 +221,6 @@ public class ClientesListPanel extends JPanel {
         int idCliente = (int) tableModel.getValueAt(row, 0);
         String nomeCliente = (String) tableModel.getValueAt(row, 1);
         
-        // Confirmar exclusão
         if (FormValidator.confirmar(this,
                 "Tem certeza que deseja excluir o cliente '" + nomeCliente + "'?",
                 "Confirmar Exclusão")) {
@@ -248,7 +232,6 @@ public class ClientesListPanel extends JPanel {
                     tableModel.removeRow(row);
                     FormValidator.mostrarSucesso(this, "Cliente excluído com sucesso!");
                     
-                    // Verificar se precisamos mostrar o estado vazio
                     if (tableModel.getRowCount() == 0) {
                         carregarClientes();
                     }

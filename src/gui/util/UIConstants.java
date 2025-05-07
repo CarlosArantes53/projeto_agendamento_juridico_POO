@@ -14,17 +14,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.JTableHeader;
 
-/**
- * Classe de constantes e utilitários para UI
- * Centraliza definições de estilos visuais da aplicação
- */
 public class UIConstants {
     
-    //--------------------------------------------------------------------------
-    // CONSTANTES DE CORES
-    //--------------------------------------------------------------------------
-    
-    // Esquema de cores principal
     public static final Color PRIMARY_DARK = new Color(25, 25, 55);
     public static final Color PRIMARY = new Color(45, 45, 80);
     public static final Color PRIMARY_LIGHT = new Color(65, 65, 110);
@@ -32,7 +23,6 @@ public class UIConstants {
     public static final Color ACCENT_LIGHT = new Color(0, 170, 156);
     public static final Color ACCENT_DARK = new Color(0, 130, 116);
     
-    // Cores para a interface
     public static final Color BACKGROUND_COLOR = PRIMARY_DARK;
     public static final Color PANEL_BACKGROUND = PRIMARY;
     public static final Color HEADER_COLOR = PRIMARY_DARK;
@@ -42,21 +32,17 @@ public class UIConstants {
     public static final Color ROW_EVEN = new Color(45, 45, 80);
     public static final Color ROW_SELECTED = new Color(60, 60, 100);
     
-
-    // Cores de texto
     public static final Color TEXT_COLOR = Color.WHITE;
     public static final Color TEXT_LIGHT = new Color(220, 220, 240);
     public static final Color TEXT_SECONDARY = new Color(180, 180, 210);
     public static final Color HEADER_TEXT_COLOR = Color.BLACK;
-    public static final Color HIGHLIGHT_TEXT_COLOR = new Color(120, 230, 220);
+    public static final Color HIGHLIGHT_TEXT_COLOR = new Color(240, 240, 250);
     public static final Color MENU_HEADER_TEXT = new Color(150, 150, 200);
     
-    // Cores de bordas
     public static final Color HEADER_BORDER_COLOR = new Color(70, 70, 120);
     public static final Color TABLE_GRID_COLOR = new Color(60, 60, 100);
     public static final Color PANEL_BORDER_COLOR = new Color(60, 60, 100);
     
-    // Cores dos botões
     public static final Color PRIMARY_BUTTON_COLOR = ACCENT;
     public static final Color PRIMARY_BUTTON_HOVER = ACCENT_LIGHT;
     public static final Color SECONDARY_BUTTON_COLOR = new Color(70, 80, 170);
@@ -67,10 +53,6 @@ public class UIConstants {
     public static final Color WARNING_BUTTON_HOVER = new Color(250, 160, 0);
     public static final Color BUTTON_TEXT_COLOR = Color.BLACK;
     
-    //--------------------------------------------------------------------------
-    // CONSTANTES DE FONTES
-    //--------------------------------------------------------------------------
-    
     public static final Font TITLE_FONT = new Font("Segoe UI", Font.BOLD, 18);
     public static final Font SUBTITLE_FONT = new Font("Segoe UI", Font.BOLD, 16);
     public static final Font LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 14);
@@ -79,10 +61,6 @@ public class UIConstants {
     public static final Font TABLE_FONT = new Font("Segoe UI", Font.PLAIN, 13);
     public static final Font MENU_HEADER_FONT = new Font("Segoe UI", Font.BOLD, 12);
     public static final Font MENU_ITEM_FONT = new Font("Segoe UI", Font.PLAIN, 14);
-    
-    //--------------------------------------------------------------------------
-    // CONSTANTES DE DIMENSÕES E ESPAÇAMENTOS
-    //--------------------------------------------------------------------------
     
     public static final int PADDING = 15;
     public static final EmptyBorder PANEL_PADDING = new EmptyBorder(PADDING, PADDING, PADDING, PADDING);
@@ -97,61 +75,35 @@ public class UIConstants {
     public static final Dimension MENU_WIDTH = new Dimension(220, 0);
     public static final int TABLE_ROW_HEIGHT = 40;
     
-    // Estilo da tabela
     public static final Color TABLE_HEADER_BG = PRIMARY_DARK;
-    public static final Color TABLE_HEADER_FG = Color.WHITE;
+    public static final Color TABLE_HEADER_FG = Color.BLACK;
     
-    //--------------------------------------------------------------------------
-    // MÉTODOS UTILITÁRIOS PARA CONFIGURAÇÃO DE COMPONENTES
-    //--------------------------------------------------------------------------
-    
-    /**
-     * Configura um painel com as cores e bordas padrão
-     */
     public static void setupPanel(JPanel panel) {
         panel.setBackground(BACKGROUND_COLOR);
         panel.setBorder(PANEL_PADDING);
     }
     
-    /**
-     * Configura um painel de conteúdo com as cores e bordas padrão
-     */
     public static void setupContentPanel(JPanel panel) {
         panel.setBackground(PANEL_BACKGROUND);
         panel.setBorder(PANEL_BORDER);
     }
     
-    /**
-     * Configura um botão primário (ação principal)
-     */
     public static void setupPrimaryButton(JButton button, String text) {
         setupButton(button, text, PRIMARY_BUTTON_COLOR, PRIMARY_BUTTON_HOVER);
     }
     
-    /**
-     * Configura um botão secundário (ações alternativas)
-     */
     public static void setupSecondaryButton(JButton button, String text) {
         setupButton(button, text, SECONDARY_BUTTON_COLOR, SECONDARY_BUTTON_HOVER);
     }
     
-    /**
-     * Configura um botão de perigo (exclusão, cancelamento)
-     */
     public static void setupDangerButton(JButton button, String text) {
         setupButton(button, text, DANGER_BUTTON_COLOR, DANGER_BUTTON_HOVER);
     }
     
-    /**
-     * Configura um botão de aviso (ações que requerem atenção)
-     */
     public static void setupWarningButton(JButton button, String text) {
         setupButton(button, text, WARNING_BUTTON_COLOR, WARNING_BUTTON_HOVER);
     }
     
-    /**
-     * Método interno para configuração base de botões
-     */
     private static void setupButton(JButton button, String text, Color bgColor, Color hoverColor) {
         button.setText(text);
         button.setBackground(bgColor);
@@ -172,9 +124,6 @@ public class UIConstants {
         });
     }
     
-    /**
-     * Configura um botão de ícone (sem texto, apenas ícone)
-     */
     public static void setupIconButton(JButton button, String tooltip) {
         button.setToolTipText(tooltip);
         button.setBackground(PANEL_BACKGROUND);
@@ -186,45 +135,30 @@ public class UIConstants {
         button.setPreferredSize(ICON_BUTTON_DIMENSION);
     }
     
-    /**
-     * Configura um label de título
-     */
     public static void setupTitleLabel(JLabel label, String text) {
         label.setText(text);
         label.setFont(TITLE_FONT);
         label.setForeground(TEXT_COLOR);
     }
     
-    /**
-     * Configura um label de subtítulo
-     */
     public static void setupSubtitleLabel(JLabel label, String text) {
         label.setText(text);
         label.setFont(SUBTITLE_FONT);
         label.setForeground(TEXT_COLOR);
     }
     
-    /**
-     * Configura um label padrão
-     */
     public static void setupLabel(JLabel label, String text) {
         label.setText(text);
         label.setFont(LABEL_FONT);
         label.setForeground(TEXT_COLOR);
     }
     
-    /**
-     * Configura um label secundário (texto menos importante)
-     */
     public static void setupSecondaryLabel(JLabel label, String text) {
         label.setText(text);
         label.setFont(LABEL_FONT);
         label.setForeground(TEXT_SECONDARY);
     }
     
-    /**
-     * Configura um radio button
-     */
     public static void setupRadioButton(JRadioButton radioButton, String text) {
         radioButton.setText(text);
         radioButton.setFont(LABEL_FONT);
@@ -232,9 +166,6 @@ public class UIConstants {
         radioButton.setBackground(BACKGROUND_COLOR);
     }
     
-    /**
-     * Configura uma tabela com o estilo padrão da aplicação
-     */
     public static void setupTable(JTable table) {
         table.setRowHeight(TABLE_ROW_HEIGHT);
         table.setFont(TABLE_FONT);

@@ -36,31 +36,25 @@ public class LoginPanel extends JPanel {
         setBackground(UIConstants.BACKGROUND_COLOR);
         setLayout(new BorderLayout());
         
-        // Painel principal com o formulário
         FormPanel formPanel = new FormPanel();
         
-        // Adicionar logo
         JLabel lblLogo = createLogoLabel();
         JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         logoPanel.setBackground(UIConstants.BACKGROUND_COLOR);
         logoPanel.add(lblLogo);
         
-        // Adicionar título
         formPanel.addTitle("HERMES - Agendamentos jurídicos");
         formPanel.addSpacer(15);
         
-        // Adicionar campos
         txtEmail = formPanel.addTextField("E-mail:", null);
         txtSenha = formPanel.addPasswordField("Senha:");
         
-        // Painel de botões
         ActionPanel actionPanel = new ActionPanel();
         
         actionPanel.addPrimaryButton("Entrar", this::realizarLogin);
-        actionPanel.addSecondaryButton("Criar Nova Conta", e -> mainFrame.mostrarPainel(MainFrame.CADASTRO_PANEL));
-        actionPanel.addWarningButton("Esqueci minha senha", e -> mainFrame.mostrarPainel(MainFrame.RECUPERAR_SENHA_PANEL));
+        actionPanel.addSecondaryButton("Criar Conta", e -> mainFrame.mostrarPainel(MainFrame.CADASTRO_PANEL));
+        actionPanel.addWarningButton("Redefinir senha", e -> mainFrame.mostrarPainel(MainFrame.RECUPERAR_SENHA_PANEL));
         
-        // Adicionar componentes ao painel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(UIConstants.BACKGROUND_COLOR);
         mainPanel.add(logoPanel, BorderLayout.NORTH);
@@ -74,7 +68,6 @@ public class LoginPanel extends JPanel {
         JLabel lblLogo = new JLabel();
         try {
             ImageIcon imageIcon = new ImageIcon("src\\gui\\images\\hermes_logo.png");
-            // Redimensionar o logo se necessário
             Image image = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
             lblLogo.setIcon(new ImageIcon(image));
             lblLogo.setHorizontalAlignment(SwingConstants.CENTER);

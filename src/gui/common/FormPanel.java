@@ -14,9 +14,6 @@ import javax.swing.JTextField;
 
 import gui.util.UIConstants;
 
-/**
- * Painel reutilizável para formulários
- */
 public class FormPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     
@@ -32,9 +29,6 @@ public class FormPanel extends JPanel {
         gbc.insets = new Insets(8, 5, 8, 5);
     }
     
-    /**
-     * Adiciona um campo de texto ao formulário
-     */
     public JTextField addTextField(String labelText, String initialValue) {
         JLabel label = new JLabel();
         UIConstants.setupLabel(label, labelText);
@@ -58,9 +52,6 @@ public class FormPanel extends JPanel {
         return textField;
     }
     
-    /**
-     * Adiciona um campo de senha ao formulário
-     */
     public JPasswordField addPasswordField(String labelText) {
         JLabel label = new JLabel();
         UIConstants.setupLabel(label, labelText);
@@ -81,9 +72,6 @@ public class FormPanel extends JPanel {
         return passwordField;
     }
     
-    /**
-     * Adiciona um campo de texto não editável ao formulário
-     */
     public JTextField addReadOnlyField(String labelText, String value) {
         JLabel label = new JLabel();
         UIConstants.setupLabel(label, labelText);
@@ -105,10 +93,7 @@ public class FormPanel extends JPanel {
         currentRow++;
         return textField;
     }
-    
-    /**
-     * Adiciona uma área de texto ao formulário
-     */
+
     public JTextArea addTextArea(String labelText, String initialValue, int rows) {
         JLabel label = new JLabel();
         UIConstants.setupLabel(label, labelText);
@@ -141,7 +126,6 @@ public class FormPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         add(scrollPane, gbc);
         
-        // Reset defaults
         gbc.weighty = 0.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -151,9 +135,6 @@ public class FormPanel extends JPanel {
         return textArea;
     }
     
-    /**
-     * Adiciona um componente personalizado ao formulário
-     */
     public void addComponent(String labelText, JComponent component) {
         JLabel label = new JLabel();
         UIConstants.setupLabel(label, labelText);
@@ -171,9 +152,7 @@ public class FormPanel extends JPanel {
         currentRow++;
     }
     
-    /**
-     * Adiciona um título ao formulário
-     */
+
     public void addTitle(String titleText) {
         JLabel title = new JLabel();
         UIConstants.setupSubtitleLabel(title, titleText);
@@ -185,16 +164,12 @@ public class FormPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 15, 5);
         add(title, gbc);
         
-        // Reset defaults
         gbc.gridwidth = 1;
         gbc.insets = new Insets(8, 5, 8, 5);
         
         currentRow++;
     }
     
-    /**
-     * Adiciona espaço vertical entre componentes
-     */
     public void addSpacer(int height) {
         javax.swing.Box.Filler filler = new javax.swing.Box.Filler(
             new java.awt.Dimension(0, height),

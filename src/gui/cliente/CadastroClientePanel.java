@@ -37,10 +37,8 @@ public class CadastroClientePanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(UIConstants.PANEL_BACKGROUND);
         
-        // Criar o cabeçalho
         HeaderPanel headerPanel = new HeaderPanel("Cadastro de Cliente");
         
-        // Criar o formulário
         FormPanel formPanel = new FormPanel();
         
         txtNome = formPanel.addTextField("Nome Completo:", null);
@@ -49,21 +47,17 @@ public class CadastroClientePanel extends JPanel {
         txtEmail = formPanel.addTextField("E-mail:", null);
         txtEndereco = formPanel.addTextArea("Endereço Completo:", null, 4);
         
-        // Criar o painel de botões
         ActionPanel actionPanel = new ActionPanel();
         
-        // Adicionar botões ao painel de ações
         JButton btnCadastrar = actionPanel.addPrimaryButton("Cadastrar", this::cadastrarCliente);
         JButton btnCancelar = actionPanel.addDangerButton("Cancelar", e -> {
             limparCampos();
-            mainFrame.voltarParaHome();
+            mainFrame.voltarParaHome(true); 
         });
         
-        // Adicionar ícones aos botões - VERSÃO CORRIGIDA
         IconManager.setButtonIcon(btnCadastrar, "save.png", 16, 16);
         IconManager.setButtonIcon(btnCancelar, "cancel.png", 16, 16);
         
-        // Adicionar componentes ao painel principal
         add(headerPanel, BorderLayout.NORTH);
         add(formPanel, BorderLayout.CENTER);
         add(actionPanel, BorderLayout.SOUTH);
@@ -76,34 +70,28 @@ public class CadastroClientePanel extends JPanel {
         String email = txtEmail.getText().trim();
         String endereco = txtEndereco.getText().trim();
         
-        // Validar campos obrigatórios
         if (!FormValidator.camposObrigatorios(this, txtNome, txtDocumento, txtTelefone, txtEmail, txtEndereco)) {
             return;
         }
         
-        // Validar formato de documento
         if (!FormValidator.validarDocumento(this, txtDocumento)) {
             return;
         }
         
-        // Validar formato de email
         if (!FormValidator.validarEmail(this, txtEmail)) {
             return;
         }
         
-        // Validar formato de telefone
         if (!FormValidator.validarTelefone(this, txtTelefone)) {
             return;
         }
         
         try {
-            // Verificar se documento já existe
             if (clienteDAO.documentoExiste(documento)) {
                 FormValidator.mostrarErro(this, "Este CPF/CNPJ já está cadastrado no sistema!");
                 return;
             }
             
-            // Criar e inserir cliente
             Cliente cliente = new Cliente(nome, documento, telefone, email, endereco);
             
             int idGerado = clienteDAO.inserir(cliente);
@@ -111,7 +99,7 @@ public class CadastroClientePanel extends JPanel {
             if (idGerado > 0) {
                 FormValidator.mostrarSucesso(this, "Cliente cadastrado com sucesso!");
                 limparCampos();
-                mainFrame.voltarParaHome();
+                mainFrame.voltarParaHome(true); 
             } else {
                 FormValidator.mostrarErro(this, "Erro ao cadastrar cliente!");
             }

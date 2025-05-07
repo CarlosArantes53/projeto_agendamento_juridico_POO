@@ -8,9 +8,6 @@ import util.ValidadorUtil;
 
 public class FormValidator {
     
-    /**
-     * Verifica se todos os campos de texto informados estão preenchidos
-     */
     public static boolean camposObrigatorios(Component parent, JTextComponent... campos) {
         for (JTextComponent campo : campos) {
             if (campo.getText().trim().isEmpty()) {
@@ -24,9 +21,6 @@ public class FormValidator {
         return true;
     }
     
-    /**
-     * Valida um e-mail usando o ValidadorUtil
-     */
     public static boolean validarEmail(Component parent, JTextComponent campoEmail) {
         String email = campoEmail.getText().trim();
         
@@ -41,9 +35,6 @@ public class FormValidator {
         return true;
     }
     
-    /**
-     * Valida uma senha usando o ValidadorUtil
-     */
     public static boolean validarSenha(Component parent, JTextComponent campoSenha) {
         String senha = campoSenha.getText();
         
@@ -58,9 +49,6 @@ public class FormValidator {
         return true;
     }
     
-    /**
-     * Valida se duas senhas coincidem
-     */
     public static boolean validarSenhasIguais(Component parent, 
             JTextComponent campoSenha, JTextComponent campoConfirmacao) {
         
@@ -78,9 +66,6 @@ public class FormValidator {
         return true;
     }
     
-    /**
-     * Valida um telefone usando o ValidadorUtil
-     */
     public static boolean validarTelefone(Component parent, JTextComponent campoTelefone) {
         String telefone = campoTelefone.getText().trim();
         
@@ -95,9 +80,6 @@ public class FormValidator {
         return true;
     }
     
-    /**
-     * Valida um documento (CPF ou CNPJ) usando o ValidadorUtil
-     */
     public static boolean validarDocumento(Component parent, JTextComponent campoDocumento) {
         String documento = campoDocumento.getText().trim();
         
@@ -112,24 +94,14 @@ public class FormValidator {
         return true;
     }
     
-    /**
-     * Exibe uma mensagem de erro genérica
-     */
     public static void mostrarErro(Component parent, String mensagem) {
         JOptionPane.showMessageDialog(parent, mensagem, "Erro", JOptionPane.ERROR_MESSAGE);
     }
     
-    /**
-     * Exibe uma mensagem de sucesso
-     */
     public static void mostrarSucesso(Component parent, String mensagem) {
         JOptionPane.showMessageDialog(parent, mensagem, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    /**
-     * Exibe uma confirmação sim/não
-     * @return true se o usuário confirmar, false caso contrário
-     */
     public static boolean confirmar(Component parent, String mensagem, String titulo) {
         int resposta = JOptionPane.showConfirmDialog(
             parent,
