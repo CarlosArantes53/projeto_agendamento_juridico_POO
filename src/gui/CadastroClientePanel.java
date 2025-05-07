@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,6 +21,7 @@ import javax.swing.JTextField;
 
 import dao.ClienteDAO;
 import modelo.Cliente;
+import util.IconManager;
 import util.UIConstants;
 import util.Validador;
 import util.ValidadorDocumento;
@@ -38,108 +41,133 @@ public class CadastroClientePanel extends JPanel {
         this.mainFrame = mainFrame;
         clienteDAO = new ClienteDAO();
         
-        // Set background color
-        setBackground(UIConstants.BACKGROUND_COLOR);
-        
         setLayout(new BorderLayout());
+        setBackground(UIConstants.PANEL_BACKGROUND);
         
-        JPanel painelPrincipal = new JPanel(new GridBagLayout());
-        painelPrincipal.setBorder(UIConstants.PANEL_PADDING);
-        painelPrincipal.setBackground(UIConstants.BACKGROUND_COLOR);
+        // Header panel
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(UIConstants.PANEL_BACKGROUND);
+        headerPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(0, 0, 1, 0, UIConstants.HEADER_BORDER_COLOR),
+            BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
+        
+        JLabel lblTitulo = new JLabel("Cadastro de Cliente");
+        UIConstants.setupSubtitleLabel(lblTitulo, "Cadastro de Cliente");
+        headerPanel.add(lblTitulo, BorderLayout.WEST);
+        
+        // Main form panel
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBackground(UIConstants.PANEL_BACKGROUND);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(8, 5, 8, 5);
+        gbc.weightx = 1.0;
         
-        // Title
-        JLabel lblTitulo = new JLabel();
-        UIConstants.setupSubtitleLabel(lblTitulo, "Cadastro de Cliente");
-        lblTitulo.setHorizontalAlignment(JLabel.CENTER);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(5, 5, 15, 5);
-        painelPrincipal.add(lblTitulo, gbc);
-        
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        
-        // Nome label
+        // Nome 
         JLabel lblNome = new JLabel();
         UIConstants.setupLabel(lblNome, "Nome Completo:");
         gbc.gridx = 0;
-        gbc.gridy = 1;
-        painelPrincipal.add(lblNome, gbc);
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.2;
+        formPanel.add(lblNome, gbc);
         
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
         txtNome = new JTextField(20);
-        painelPrincipal.add(txtNome, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.8;
+        formPanel.add(txtNome, gbc);
         
-        // Documento label
+        // Documento
         JLabel lblDocumento = new JLabel();
         UIConstants.setupLabel(lblDocumento, "CPF/CNPJ:");
         gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 0.0;
-        painelPrincipal.add(lblDocumento, gbc);
+        gbc.gridy = 1;
+        gbc.weightx = 0.2;
+        formPanel.add(lblDocumento, gbc);
         
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
         txtDocumento = new JTextField(20);
-        painelPrincipal.add(txtDocumento, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.8;
+        formPanel.add(txtDocumento, gbc);
         
-        // Telefone label
+        // Telefone
         JLabel lblTelefone = new JLabel();
         UIConstants.setupLabel(lblTelefone, "Telefone:");
         gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.weightx = 0.0;
-        painelPrincipal.add(lblTelefone, gbc);
+        gbc.gridy = 2;
+        gbc.weightx = 0.2;
+        formPanel.add(lblTelefone, gbc);
         
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
         txtTelefone = new JTextField(20);
-        painelPrincipal.add(txtTelefone, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.8;
+        formPanel.add(txtTelefone, gbc);
         
-        // Email label
+        // Email
         JLabel lblEmail = new JLabel();
         UIConstants.setupLabel(lblEmail, "E-mail:");
         gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.weightx = 0.0;
-        painelPrincipal.add(lblEmail, gbc);
+        gbc.gridy = 3;
+        gbc.weightx = 0.2;
+        formPanel.add(lblEmail, gbc);
         
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
         txtEmail = new JTextField(20);
-        painelPrincipal.add(txtEmail, gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 0.8;
+        formPanel.add(txtEmail, gbc);
         
-        // Endereço label
+        // Endereço
         JLabel lblEndereco = new JLabel();
         UIConstants.setupLabel(lblEndereco, "Endereço Completo:");
         gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.weightx = 0.0;
-        painelPrincipal.add(lblEndereco, gbc);
+        gbc.gridy = 4;
+        gbc.weightx = 0.2;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(15, 5, 8, 5);
+        formPanel.add(lblEndereco, gbc);
         
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
         txtEndereco = new JTextArea(4, 20);
         txtEndereco.setLineWrap(true);
         txtEndereco.setWrapStyleWord(true);
-        JScrollPane scrollEndereco = new JScrollPane(txtEndereco);
-        painelPrincipal.add(scrollEndereco, gbc);
+        txtEndereco.setFont(UIConstants.LABEL_FONT);
+        txtEndereco.setBackground(UIConstants.ROW_EVEN);
+        txtEndereco.setForeground(UIConstants.TEXT_COLOR);
+        txtEndereco.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         
-        // Buttons panel
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        painelBotoes.setBackground(UIConstants.BACKGROUND_COLOR);
+        JScrollPane scrollEndereco = new JScrollPane(txtEndereco);
+        scrollEndereco.setBorder(BorderFactory.createLineBorder(UIConstants.HEADER_BORDER_COLOR));
+        
+        gbc.gridx = 1;
+        gbc.weightx = 0.8;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        formPanel.add(scrollEndereco, gbc);
+        
+        // Footer with buttons
+        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        footerPanel.setBackground(UIConstants.PANEL_BACKGROUND);
+        footerPanel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, UIConstants.HEADER_BORDER_COLOR));
         
         JButton btnCadastrar = new JButton();
         UIConstants.setupPrimaryButton(btnCadastrar, "Cadastrar");
         
+        // Add icon if available
+        ImageIcon saveIcon = IconManager.loadIcon("save.png", 16, 16);
+        if (saveIcon != null) {
+            btnCadastrar.setIcon(saveIcon);
+        }
+        
         JButton btnVoltar = new JButton();
-        UIConstants.setupDangerButton(btnVoltar, "Voltar");
+        UIConstants.setupDangerButton(btnVoltar, "Cancelar");
+        
+        // Add icon if available
+        ImageIcon cancelIcon = IconManager.loadIcon("cancel.png", 16, 16);
+        if (cancelIcon != null) {
+            btnVoltar.setIcon(cancelIcon);
+        }
         
         btnCadastrar.addActionListener(new ActionListener() {
             @Override
@@ -152,15 +180,16 @@ public class CadastroClientePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 limparCampos();
-                mainFrame.mostrarPainel(MainFrame.HOME_PANEL);
+                mainFrame.voltarParaHome();
             }
         });
         
-        painelBotoes.add(btnCadastrar);
-        painelBotoes.add(btnVoltar);
+        footerPanel.add(btnCadastrar);
+        footerPanel.add(btnVoltar);
         
-        add(painelPrincipal, BorderLayout.CENTER);
-        add(painelBotoes, BorderLayout.SOUTH);
+        add(headerPanel, BorderLayout.NORTH);
+        add(formPanel, BorderLayout.CENTER);
+        add(footerPanel, BorderLayout.SOUTH);
     }
     
     private void cadastrarCliente() {
@@ -208,7 +237,7 @@ public class CadastroClientePanel extends JPanel {
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 
                 limparCampos();
-                mainFrame.mostrarPainel(MainFrame.HOME_PANEL);
+                mainFrame.voltarParaHome();
             } else {
                 JOptionPane.showMessageDialog(this, "Erro ao cadastrar cliente!", 
                     "Erro", JOptionPane.ERROR_MESSAGE);
