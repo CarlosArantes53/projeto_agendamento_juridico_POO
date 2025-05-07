@@ -15,6 +15,8 @@ public class MainFrame extends JFrame {
     public static final String HOME_PANEL = "home";
     public static final String RECUPERAR_SENHA_PANEL = "recuperarSenha";
     public static final String EDITAR_PERFIL_PANEL = "editarPerfil";
+    public static final String CADASTRO_CLIENTE_PANEL = "cadastroCliente"; // Nova constante
+    public static final String LISTAR_CLIENTES_PANEL = "listarClientes"; // Nova constante para futura listagem
     
     private JPanel contentPane;
     private CardLayout cardLayout;
@@ -24,6 +26,7 @@ public class MainFrame extends JFrame {
     private HomePanel homePanel;
     private RecuperarSenhaPanel recuperarSenhaPanel;
     private EditarPerfilPanel editarPerfilPanel;
+    private CadastroClientePanel cadastroClientePanel; // Novo painel
     
     private Usuario usuarioLogado;
     
@@ -93,6 +96,20 @@ public class MainFrame extends JFrame {
         contentPane.add(editarPerfilPanel, EDITAR_PERFIL_PANEL);
         
         cardLayout.show(contentPane, EDITAR_PERFIL_PANEL);
+    }
+    
+    // Método para criar e mostrar o painel de cadastro de cliente
+    public void mostrarPainelCadastroCliente() {
+        // Remove o painel de cadastro de cliente antigo se existir
+        if (cadastroClientePanel != null) {
+            contentPane.remove(cadastroClientePanel);
+        }
+        
+        // Cria um novo painel de cadastro de cliente
+        cadastroClientePanel = new CadastroClientePanel(this);
+        contentPane.add(cadastroClientePanel, CADASTRO_CLIENTE_PANEL);
+        
+        cardLayout.show(contentPane, CADASTRO_CLIENTE_PANEL);
     }
     
     // Método para atualizar o usuário logado após edição do perfil

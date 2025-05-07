@@ -71,15 +71,27 @@ public class HomePanel extends JPanel {
         contentPanel.add(dashboardPanel, gbc);
         
         // Footer panel with buttons
-        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footerPanel.setBackground(UIConstants.BACKGROUND_COLOR);
         footerPanel.setBorder(new MatteBorder(1, 0, 0, 0, UIConstants.HEADER_BORDER_COLOR));
+        
+        // Botão para cadastrar cliente (NOVO)
+        JButton btnCadastrarCliente = new JButton();
+        UIConstants.setupSecondaryButton(btnCadastrarCliente, "Cadastrar Cliente");
         
         JButton btnEditarPerfil = new JButton();
         UIConstants.setupSecondaryButton(btnEditarPerfil, "Editar Perfil");
         
         JButton btnLogout = new JButton();
         UIConstants.setupDangerButton(btnLogout, "Sair");
+        
+        // Action listener para o botão de cadastrar cliente (NOVO)
+        btnCadastrarCliente.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainFrame.mostrarPainelCadastroCliente();
+            }
+        });
         
         btnEditarPerfil.addActionListener(new ActionListener() {
             @Override
@@ -95,6 +107,8 @@ public class HomePanel extends JPanel {
             }
         });
         
+        // Adicionar o botão de cadastrar cliente ao painel (NOVO)
+        footerPanel.add(btnCadastrarCliente);
         footerPanel.add(btnEditarPerfil);
         footerPanel.add(btnLogout);
         
