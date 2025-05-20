@@ -26,6 +26,7 @@ import gui.util.IconManager;
 import gui.util.UIConstants;
 import modelo.Cliente;
 import modelo.Usuario;
+import modelo.Usuario.TipoUsuario;
 
 public class HomePanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -192,12 +193,50 @@ public class HomePanel extends JPanel {
         
         JPanel novoAgendamentoOption = criarOpcaoMenu(
             "Novo Agendamento", 
-            IconManager.ICON_CALENDAR, 
-            e -> {
-                // Implementação futura
-            }
+            IconManager.ICON_ADD_W, 
+            e -> mainFrame.mostrarPainelAgendamento()
         );
         menu.add(novoAgendamentoOption);
+        
+        JPanel calendarioOption = criarOpcaoMenu(
+            "Calendário", 
+            IconManager.ICON_CALENDAR, 
+            e -> mainFrame.mostrarPainelCalendario()
+        );
+        menu.add(calendarioOption);
+        
+        // Adicionar seção de DISPONIBILIDADE apenas para advogados
+        if (usuarioLogado.getTipoUsuario() == TipoUsuario.ADVOGADO) {
+            JPanel disponibilidadeHeader = criarCabecalhoMenu("DISPONIBILIDADE");
+            menu.add(disponibilidadeHeader);
+            
+            JPanel gerenciarDisponibilidadeOption = criarOpcaoMenu(
+                "Gerenciar Horários", 
+                IconManager.ICON_LIST, 
+                e -> mainFrame.mostrarPainelGerenciarDisponibilidade(usuarioLogado)
+            );
+            menu.add(gerenciarDisponibilidadeOption);
+            
+            JPanel excecoesOption = criarOpcaoMenu(
+                "Exceções (Férias/Folgas)", 
+                IconManager.ICON_CALENDAR, 
+                e -> mainFrame.mostrarPainelExcecaoDisponibilidade(usuarioLogado)
+            );
+            menu.add(excecoesOption);
+        }
+        
+        // Adicionar seção de CONFIGURAÇÕES para o secretário
+        if (usuarioLogado.getTipoUsuario() == TipoUsuario.SECRETARIO) {
+            JPanel configuracoesHeader = criarCabecalhoMenu("CONFIGURAÇÕES");
+            menu.add(configuracoesHeader);
+            
+            JPanel tiposAtendimentoOption = criarOpcaoMenu(
+                "Tipos de Atendimento", 
+                IconManager.ICON_LIST, 
+                e -> mainFrame.mostrarPainelTipoAtendimento()
+            );
+            menu.add(tiposAtendimentoOption);
+        }
         
         menu.add(Box.createVerticalGlue());
         
@@ -275,14 +314,88 @@ public class HomePanel extends JPanel {
         
         HeaderPanel headerPanel = new HeaderPanel("Dashboard");
         
-        JPanel contentPanel = new JPanel(new java.awt.GridBagLayout());
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(UIConstants.PANEL_BACKGROUND);
         
-        JLabel lblDashboard = new JLabel("DASHBOARD", SwingConstants.CENTER);
+        // Ajuste do título principal
+        JLabel lblDashboard = new JLabel("Bem-vindo ao Sistema de Agendamentos HERMES", SwingConstants.CENTER);
         lblDashboard.setForeground(UIConstants.HIGHLIGHT_TEXT_COLOR);
-        lblDashboard.setFont(UIConstants.TITLE_FONT);
+        lblDashboard.setFont(new Font(UIConstants.TITLE_FONT.getName(), Font.BOLD, 22));
+        lblDashboard.setAlignmentX(CENTER_ALIGNMENT);
         
+        JPanel botoesRapidos = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        botoesRapidos.setBackground(UIConstants.PANEL_BACKGROUND);
+        botoesRapidos.setAlignmentX(CENTER_ALIGNMENT);
+        
+        // Criar botões com tamanho maior
+        Dimension botaoDimensao = new Dimension(250, 80);
+        Font fonteBotao = new Font(UIConstants.BUTTON_FONT.getName(), Font.BOLD, 16);
+        
+        JButton btnNovoAgendamento = new JButton("Novo Agendamento");
+        UIConstants.setupPrimaryButton(btnNovoAgendamento, "Novo Agendamento");
+        btnNovoAgendamento.setPreferredSize(botaoDimensao);
+        btnNovoAgendamento.setFont(fonteBotao);
+        btnNovoAgendamento.addActionListener(e -> mainFrame.mostrarPainelAgendamento());
+        
+        JButton btnCalendario = new JButton("Ver Calendário");
+        UIConstants.setupSecondaryButton(btnCalendario, "Ver Calendário");
+        btnCalendario.setPreferredSize(botaoDimensao);
+        btnCalendario.setFont(fonteBotao);
+        btnCalendario.addActionListener(e -> mainFrame.mostrarPainelCalendario());
+        
+        JButton btnClientes = new JButton("Gerenciar Clientes");
+        UIConstants.setupSecondaryButton(btnClientes, "Gerenciar Clientes");
+        btnClientes.setPreferredSize(botaoDimensao);
+        btnClientes.setFont(fonteBotao);
+        btnClientes.addActionListener(e -> {
+            clientesListPanel.carregarClientes();
+            contentCardLayout.show(contentContainer, CLIENTES_PANEL);
+        });
+        
+        JButton btnTiposAtendimento = new JButton("Gerenciar Tipos de Atendimento");
+        UIConstants.setupSecondaryButton(btnTiposAtendimento, "Gerenciar Tipos de Atendimento");
+        btnTiposAtendimento.setPreferredSize(botaoDimensao);
+        btnTiposAtendimento.setFont(fonteBotao);
+        btnTiposAtendimento.addActionListener(e -> mainFrame.mostrarPainelTipoAtendimento());
+        
+        // Organizar botões em duas linhas
+        JPanel linhaUm = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        linhaUm.setBackground(UIConstants.PANEL_BACKGROUND);
+        linhaUm.add(btnNovoAgendamento);
+        linhaUm.add(btnCalendario);
+        
+        JPanel linhaDois = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        linhaDois.setBackground(UIConstants.PANEL_BACKGROUND);
+        linhaDois.add(btnClientes);
+        linhaDois.add(btnTiposAtendimento);
+        
+        // Adicionar as linhas ao painel de botões
+        botoesRapidos.setLayout(new BoxLayout(botoesRapidos, BoxLayout.Y_AXIS));
+        botoesRapidos.add(linhaUm);
+        botoesRapidos.add(linhaDois);
+        
+        // Botão de disponibilidade somente para advogados
+        if (usuarioLogado.getTipoUsuario() == TipoUsuario.ADVOGADO) {
+            JButton btnDisponibilidade = new JButton("Gerenciar Disponibilidade");
+            UIConstants.setupSecondaryButton(btnDisponibilidade, "Gerenciar Disponibilidade");
+            btnDisponibilidade.setPreferredSize(botaoDimensao);
+            btnDisponibilidade.setFont(fonteBotao);
+            btnDisponibilidade.addActionListener(e -> mainFrame.mostrarPainelGerenciarDisponibilidade(usuarioLogado));
+            
+            JPanel linhaTres = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+            linhaTres.setBackground(UIConstants.PANEL_BACKGROUND);
+            linhaTres.add(btnDisponibilidade);
+            botoesRapidos.add(linhaTres);
+        }
+        
+        
+        contentPanel.add(Box.createVerticalGlue());
         contentPanel.add(lblDashboard);
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 50)));
+        contentPanel.add(botoesRapidos);
+        contentPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+        contentPanel.add(Box.createVerticalGlue());
         
         dashboard.add(headerPanel, BorderLayout.NORTH);
         dashboard.add(contentPanel, BorderLayout.CENTER);

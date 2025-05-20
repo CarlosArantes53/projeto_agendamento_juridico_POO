@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import dao.base.BaseDAO;
 import modelo.Usuario;
@@ -76,6 +77,54 @@ public class UsuarioDAO extends BaseDAO {
         });
         
         return linhasAfetadas > 0;
+    }
+    
+    public List<Usuario> listarPorTipo(TipoUsuario tipo) throws SQLException {
+        String sql = "SELECT * FROM usuarios WHERE tipo_usuario = ? ORDER BY nome";
+        
+        return executeQuery(sql, 
+            stmt -> stmt.setString(1, tipo.toString()),
+            rs -> mapList(rs, t -> {
+                try {
+                    return mapearUsuario(t);
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return null;
+            })
+        );
+    }
+    
+    public List<Usuario> listarTodos() throws SQLException {
+        String sql = "SELECT * FROM usuarios ORDER BY nome";
+        
+        return executeQuery(sql, 
+            null,
+            rs -> mapList(rs, t -> {
+                try {
+                    return mapearUsuario(t);
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return null;
+            })
+        );
+    }
+    
+    public Usuario buscarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM usuarios WHERE id = ?";
+        
+        return executeQuery(sql, 
+            stmt -> stmt.setInt(1, id),
+            rs -> {
+                if (rs.next()) {
+                    return mapearUsuario(rs);
+                }
+                return null;
+            }
+        );
     }
     
     private Usuario mapearUsuario(ResultSet rs) throws SQLException {

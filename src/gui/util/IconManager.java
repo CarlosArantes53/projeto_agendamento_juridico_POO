@@ -18,8 +18,10 @@ public class IconManager {
     public static final String ICON_LOGOUT = "logout.png";
     public static final String ICON_CUSTOMER = "customer.png";
     public static final String ICON_ADD = "add.png";
+    public static final String ICON_ADD_W = "add_w.png";
     public static final String ICON_LIST = "list.png";
     public static final String ICON_CALENDAR = "calendar.png";
+    public static final String ICON_CALENDAR_B = "b_calendario.png";
     public static final String ICON_DASHBOARD = "dashboard.png";
     public static final String ICON_EDIT = "edit.png";
     public static final String ICON_DELETE = "delete.png";
