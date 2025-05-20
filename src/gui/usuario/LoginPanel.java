@@ -2,7 +2,6 @@ package gui.usuario;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
@@ -19,6 +18,7 @@ import gui.common.ActionPanel;
 import gui.common.FormPanel;
 import gui.common.FormValidator;
 import modelo.Usuario;
+import gui.util.IconManager;
 import gui.util.UIConstants;
 
 public class LoginPanel extends JPanel {
@@ -67,10 +67,14 @@ public class LoginPanel extends JPanel {
     private JLabel createLogoLabel() {
         JLabel lblLogo = new JLabel();
         try {
-            ImageIcon imageIcon = new ImageIcon("src\\gui\\images\\hermes_logo.png");
-            Image image = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-            lblLogo.setIcon(new ImageIcon(image));
-            lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+            // Usar o novo método melhorado para carregar o logo
+            ImageIcon imageIcon = IconManager.loadLogo("src\\gui\\images\\hermes_logo.png", 150, 150);
+            if (imageIcon != null) {
+                lblLogo.setIcon(imageIcon);
+                lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+            } else {
+                throw new Exception("Não foi possível carregar o logo");
+            }
         } catch (Exception e) {
             System.err.println("Erro ao carregar a imagem: " + e.getMessage());
             lblLogo.setText("HERMES");
