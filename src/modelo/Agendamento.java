@@ -16,17 +16,17 @@ public class Agendamento {
     private int id;
     private LocalDate dataAtendimento;
     private LocalTime horaInicio;
-    private int duracao; // Em minutos
+    private int duracao; 
     private int idCliente;
-    private String nomeCliente; // Para facilitar a exibição
+    private String nomeCliente; 
     private int idAdvogado;
-    private String nomeAdvogado; // Para facilitar a exibição
+    private String nomeAdvogado; 
     private int idTipoAtendimento;
-    private String nomeTipoAtendimento; // Para facilitar a exibição
+    private String nomeTipoAtendimento; 
     private String descricao;
     private Status status;
     private int idUsuarioCriador;
-    private String cor; // Cor associada ao tipo de atendimento
+    private String cor; 
     
     public Agendamento() {
     }

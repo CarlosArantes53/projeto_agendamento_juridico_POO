@@ -67,7 +67,6 @@ public class LoginPanel extends JPanel {
     private JLabel createLogoLabel() {
         JLabel lblLogo = new JLabel();
         try {
-            // Usar o novo método melhorado para carregar o logo
             ImageIcon imageIcon = IconManager.loadLogo("src\\gui\\images\\hermes_logo.png", 150, 150);
             if (imageIcon != null) {
                 lblLogo.setIcon(imageIcon);

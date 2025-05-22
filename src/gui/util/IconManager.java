@@ -15,7 +15,7 @@ public class IconManager {
     
     private static final String ICON_PATH = "src/gui/images/icons/";
     
-    // Constantes para os ícones
+    
     public static final String ICON_MENU = "menu.png";
     public static final String ICON_PROFILE = "profile.png";
     public static final String ICON_LOGOUT = "logout.png";
@@ -34,33 +34,26 @@ public class IconManager {
     public static final String ICON_REFRESH = "refresh.png";
     
     
-    /**
-     * Carrega um ícone com melhor qualidade redimensionado para o tamanho especificado.
-     * 
-     * @param iconName Nome do arquivo do ícone
-     * @param width Largura desejada
-     * @param height Altura desejada
-     * @return ImageIcon redimensionado com alta qualidade
-     */
+    
     public static ImageIcon loadIcon(String iconName, int width, int height) {
         try {
-            // Tenta carregar a imagem como BufferedImage para melhor controle de qualidade
+            
             File imageFile = new File(ICON_PATH + iconName);
             if (imageFile.exists()) {
                 BufferedImage originalImage = ImageIO.read(imageFile);
                 
-                // Se a imagem já tem o tamanho desejado, não redimensione
+                
                 if (originalImage.getWidth() == width && originalImage.getHeight() == height) {
                     return new ImageIcon(originalImage);
                 }
                 
-                // Criar uma nova imagem com melhor qualidade
+                
                 BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
                 
-                // Obter o objeto Graphics2D da nova imagem e configurar para melhor qualidade
+                
                 java.awt.Graphics2D g2d = resizedImage.createGraphics();
                 
-                // Configurações para melhor qualidade de redimensionamento
+                
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, 
                         java.awt.RenderingHints.VALUE_INTERPOLATION_BICUBIC);
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, 
@@ -68,7 +61,7 @@ public class IconManager {
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
                         java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
                 
-                // Desenhar a imagem redimensionada com alta qualidade
+                
                 g2d.drawImage(originalImage, 0, 0, width, height, null);
                 g2d.dispose();
                 
@@ -84,16 +77,12 @@ public class IconManager {
         }
     }
     
-    /**
-     * Carrega um ícone com tamanho padrão de 16x16.
-     */
+    
     public static ImageIcon loadIcon(String iconName) {
         return loadIcon(iconName, 16, 16);
     }
     
-    /**
-     * Configura um botão com um ícone.
-     */
+    
     public static void setupIconButton(JButton button, String iconName, String tooltip, int size) {
         ImageIcon icon = loadIcon(iconName, size - 10, size - 10);
         
@@ -111,9 +100,7 @@ public class IconManager {
         button.setOpaque(false);
     }
 
-    /**
-     * Define o ícone para um componente JComponent.
-     */
+    
     public static boolean setComponentIcon(JComponent component, String iconName, int width, int height) {
         ImageIcon icon = loadIcon(iconName, width, height);
         
@@ -127,9 +114,7 @@ public class IconManager {
         return false;
     }
     
-    /**
-     * Define o ícone para um botão.
-     */
+    
     public static boolean setButtonIcon(Component button, String iconName, int width, int height) {
         ImageIcon icon = loadIcon(iconName, width, height);
         
@@ -142,29 +127,25 @@ public class IconManager {
         return false;
     }
     
-    /**
-     * Define o ícone para um botão com tamanho padrão.
-     */
+    
     public static boolean setButtonIcon(JButton button, String iconName) {
         return setButtonIcon(button, iconName, 16, 16);
     }
     
-    /**
-     * Carrega uma imagem maior, como o logo, com alta qualidade.
-     */
+    
     public static ImageIcon loadLogo(String imagePath, int width, int height) {
         try {
             File imageFile = new File(imagePath);
             if (imageFile.exists()) {
                 BufferedImage originalImage = ImageIO.read(imageFile);
                 
-                // Criar uma nova imagem com melhor qualidade
+                
                 BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
                 
-                // Obter o objeto Graphics2D da nova imagem e configurar para melhor qualidade
+                
                 java.awt.Graphics2D g2d = resizedImage.createGraphics();
                 
-                // Configurações para melhor qualidade de redimensionamento
+                
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, 
                         java.awt.RenderingHints.VALUE_INTERPOLATION_BICUBIC);
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, 
@@ -172,7 +153,7 @@ public class IconManager {
                 g2d.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, 
                         java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
                 
-                // Desenhar a imagem redimensionada com alta qualidade
+                
                 g2d.drawImage(originalImage, 0, 0, width, height, null);
                 g2d.dispose();
                 

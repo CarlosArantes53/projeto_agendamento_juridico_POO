@@ -180,7 +180,7 @@ public class CalendarioPanel extends JPanel {
         
         panel.add(navPanel, BorderLayout.CENTER);
         
-        // Adicionar o filtro de advogados apenas se for secretário
+        
         if (usuarioLogado.getTipoUsuario() == TipoUsuario.SECRETARIO) {
             panel.add(filtroPanel, BorderLayout.EAST);
         }
@@ -220,45 +220,45 @@ public class CalendarioPanel extends JPanel {
         LocalDate primeiroDiaMes = yearMonth.atDay(1);
         LocalDate ultimoDiaMes = yearMonth.atEndOfMonth();
         
-        // Atualizar label do mês/ano
+        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy", new Locale("pt", "BR"));
         lblMesAno.setText(mesAtual.format(formatter));
         
-        // Remover dias antigos
+        
         JPanel daysPanel = (JPanel) calendarPanel.getComponent(1);
         daysPanel.removeAll();
         
-        int diaSemanaInicio = primeiroDiaMes.getDayOfWeek().getValue() % 7; // Ajuste para domingo = 0
+        int diaSemanaInicio = primeiroDiaMes.getDayOfWeek().getValue() % 7; 
         
-        // Carregar agendamentos do mês
+        
         try {
             carregarAgendamentosMes(yearMonth);
         } catch (SQLException e) {
             FormValidator.mostrarErro(this, "Erro ao carregar agendamentos: " + e.getMessage());
         }
         
-        // Adicionar células vazias antes do primeiro dia
+        
         for (int i = 0; i < diaSemanaInicio; i++) {
             JPanel dayPanel = criarPainelDiaVazio();
             daysPanel.add(dayPanel);
         }
         
-        // Adicionar dias do mês
+        
         for (int dia = 1; dia <= ultimoDiaMes.getDayOfMonth(); dia++) {
             final LocalDate data = LocalDate.of(mesAtual.getYear(), mesAtual.getMonth(), dia);
             JPanel dayPanel = criarPainelDia(dia, data);
             daysPanel.add(dayPanel);
         }
         
-        // Preencher células restantes
-        int totalCells = 42; // 6 semanas * 7 dias
+        
+        int totalCells = 42; 
         int diasAdicionados = diaSemanaInicio + ultimoDiaMes.getDayOfMonth();
         for (int i = diasAdicionados; i < totalCells; i++) {
             JPanel dayPanel = criarPainelDiaVazio();
             daysPanel.add(dayPanel);
         }
         
-        // Limpar painel de agendamentos
+        
         agendamentosPanel.removeAll();
         JLabel lblSelecioneData = new JLabel("Selecione uma data para ver os agendamentos");
         lblSelecioneData.setForeground(UIConstants.TEXT_SECONDARY);
@@ -301,11 +301,11 @@ public class CalendarioPanel extends JPanel {
         eventPanel.setLayout(new BoxLayout(eventPanel, BoxLayout.Y_AXIS));
         eventPanel.setBackground(panel.getBackground());
         
-        // Verificar se tem agendamentos neste dia
+        
         if (agendamentosPorDia.containsKey(data)) {
             List<Agendamento> agendamentosDia = agendamentosPorDia.get(data);
             if (!agendamentosDia.isEmpty()) {
-                // Mostrar indicador de agendamentos
+                
                 int qtdAgendamentos = agendamentosDia.size();
                 
                 JLabel lblIndicador = new JLabel("" + qtdAgendamentos + " agend.");
@@ -322,7 +322,7 @@ public class CalendarioPanel extends JPanel {
         
         panel.add(eventPanel, BorderLayout.CENTER);
         
-        // Adicionar evento de clique para mostrar agendamentos
+        
         panel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -348,25 +348,25 @@ public class CalendarioPanel extends JPanel {
         
         List<Agendamento> agendamentos;
         
-        // Se for advogado, sempre filtrar apenas pelos próprios agendamentos
+        
         if (usuarioLogado.getTipoUsuario() == TipoUsuario.ADVOGADO) {
             agendamentos = agendamentoDAO.listarPorAdvogado(
                     usuarioLogado.getId(), dataInicio, dataFim);
         } else {
-            // Para secretário, usar o filtro selecionado
+            
             Usuario advogadoSelecionado = (Usuario) cbAdvogado.getSelectedItem();
             
             if (advogadoSelecionado == null) {
-                // Carregar todos os agendamentos
+                
                 agendamentos = agendamentoDAO.listarPorPeriodo(dataInicio, dataFim);
             } else {
-                // Carregar apenas agendamentos do advogado selecionado
+                
                 agendamentos = agendamentoDAO.listarPorAdvogado(
                         advogadoSelecionado.getId(), dataInicio, dataFim);
             }
         }
         
-        // Agrupar agendamentos por dia
+        
         for (Agendamento agendamento : agendamentos) {
             LocalDate data = agendamento.getDataAtendimento();
             
@@ -463,7 +463,7 @@ public class CalendarioPanel extends JPanel {
         panel.add(Box.createVerticalStrut(3));
         panel.add(lblStatus);
         
-        // Adicionar evento de clique para abrir detalhes do agendamento
+        
         panel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -503,10 +503,10 @@ public class CalendarioPanel extends JPanel {
         try {
             List<Usuario> advogados = usuarioDAO.listarPorTipo(TipoUsuario.ADVOGADO);
             
-            // Para usuários tipo SECRETARIO, permitir filtrar por advogado
+            
             if (usuarioLogado.getTipoUsuario() == TipoUsuario.SECRETARIO) {
                 DefaultComboBoxModel<Usuario> model = new DefaultComboBoxModel<>();
-                model.addElement(null); // Opção "Todos os advogados"
+                model.addElement(null); 
                 
                 for (Usuario advogado : advogados) {
                     model.addElement(advogado);
@@ -514,10 +514,10 @@ public class CalendarioPanel extends JPanel {
                 
                 cbAdvogado.setModel(model);
             } 
-            // Para usuários tipo ADVOGADO, forçar visualização apenas da própria agenda
+            
             else if (usuarioLogado.getTipoUsuario() == TipoUsuario.ADVOGADO) {
-                // Não exibimos o combobox para advogados, mas podemos configurá-lo internamente
-                // para usar a lógica de carregamento de agendamentos
+                
+                
                 DefaultComboBoxModel<Usuario> model = new DefaultComboBoxModel<>();
                 model.addElement(usuarioLogado);
                 cbAdvogado.setModel(model);

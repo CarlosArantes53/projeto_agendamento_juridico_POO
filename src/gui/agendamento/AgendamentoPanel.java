@@ -92,7 +92,6 @@ public class AgendamentoPanel extends JPanel {
     private JPanel criarFormularioAgendamento() {
         FormPanel formPanel = new FormPanel();
         
-        // Data - usando JFormattedTextField com máscara
         try {
             MaskFormatter dateMask = new MaskFormatter("##/##/####");
             dateMask.setPlaceholderCharacter('_');
@@ -101,7 +100,6 @@ public class AgendamentoPanel extends JPanel {
             txtData.setColumns(10);
             txtData.setFont(UIConstants.LABEL_FONT);
             
-            // Preencher com a data atual + 1 dia
             LocalDate amanha = LocalDate.now().plusDays(1);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             txtData.setValue(amanha.format(formatter));
@@ -113,7 +111,6 @@ public class AgendamentoPanel extends JPanel {
         
         formPanel.addComponent("Data:", txtData);
         
-        // Hora e minuto
         JPanel panelHorario = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         panelHorario.setBackground(UIConstants.PANEL_BACKGROUND);
         
@@ -131,27 +128,21 @@ public class AgendamentoPanel extends JPanel {
         
         formPanel.addComponent("Hora:", panelHorario);
         
-        // Duração
         spnDuracao = new JSpinner(new SpinnerNumberModel(60, 15, 480, 15));
         formPanel.addComponent("Duração (minutos):", spnDuracao);
         
-        // Cliente
         cbCliente = new JComboBox<>();
         formPanel.addComponent("Cliente:", cbCliente);
         
-        // Advogado
         cbAdvogado = new JComboBox<>();
         formPanel.addComponent("Advogado:", cbAdvogado);
         
-        // Tipo de atendimento
         cbTipoAtendimento = new JComboBox<>();
         cbTipoAtendimento.addActionListener(e -> atualizarDuracaoPadrao());
         formPanel.addComponent("Tipo de Atendimento:", cbTipoAtendimento);
         
-        // Descrição
         txtDescricao = formPanel.addTextArea("Descrição/Observações:", null, 4);
         
-        // Ações
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         btnPanel.setBackground(UIConstants.PANEL_BACKGROUND);
         
@@ -176,7 +167,6 @@ public class AgendamentoPanel extends JPanel {
     
     private void carregarDados() {
         try {
-            // Carregar clientes
             List<Cliente> clientes = clienteDAO.listarTodos();
             DefaultComboBoxModel<Cliente> clienteModel = new DefaultComboBoxModel<>();
             
@@ -186,7 +176,6 @@ public class AgendamentoPanel extends JPanel {
             
             cbCliente.setModel(clienteModel);
             
-            // Configurar o ComboBox para mostrar apenas o nome do cliente
             cbCliente.setRenderer(new javax.swing.DefaultListCellRenderer() {
                 @Override
                 public Component getListCellRendererComponent(javax.swing.JList<?> list, Object value, 
@@ -199,7 +188,6 @@ public class AgendamentoPanel extends JPanel {
                 }
             });
             
-            // Carregar advogados
             List<Usuario> advogados = usuarioDAO.listarPorTipo(TipoUsuario.ADVOGADO);
             DefaultComboBoxModel<Usuario> advogadoModel = new DefaultComboBoxModel<>();
             
@@ -209,7 +197,6 @@ public class AgendamentoPanel extends JPanel {
             
             cbAdvogado.setModel(advogadoModel);
             
-            // Configurar o ComboBox para mostrar apenas o nome do advogado
             cbAdvogado.setRenderer(new javax.swing.DefaultListCellRenderer() {
                 @Override
                 public Component getListCellRendererComponent(javax.swing.JList<?> list, Object value, 
@@ -222,7 +209,6 @@ public class AgendamentoPanel extends JPanel {
                 }
             });
             
-            // Carregar tipos de atendimento
             List<TipoAtendimento> tipos = tipoAtendimentoDAO.listarTodos();
             DefaultComboBoxModel<TipoAtendimento> tipoModel = new DefaultComboBoxModel<>();
             
@@ -232,7 +218,6 @@ public class AgendamentoPanel extends JPanel {
             
             cbTipoAtendimento.setModel(tipoModel);
             
-            // Se for um advogado, pré-selecionar ele mesmo e desabilitar seleção
             if (usuarioLogado.getTipoUsuario() == TipoUsuario.ADVOGADO) {
                 for (int i = 0; i < advogadoModel.getSize(); i++) {
                     if (advogadoModel.getElementAt(i).getId() == usuarioLogado.getId()) {
@@ -240,11 +225,9 @@ public class AgendamentoPanel extends JPanel {
                         break;
                     }
                 }
-                // Desabilitar a seleção de advogado para usuários do tipo advogado
                 cbAdvogado.setEnabled(false);
             }
             
-            // Atualizar duração padrão baseada no tipo de atendimento selecionado
             atualizarDuracaoPadrao();
             
         } catch (SQLException e) {
@@ -288,7 +271,6 @@ public class AgendamentoPanel extends JPanel {
                 return;
             }
             
-            // Verificar disponibilidade do advogado
             LocalTime horaFim = horaInicio.plusMinutes(duracao);
             boolean disponivel = agendamentoDAO.verificarDisponibilidade(
                     advogado.getId(), data, horaInicio, horaFim);
@@ -300,7 +282,6 @@ public class AgendamentoPanel extends JPanel {
                 return;
             }
             
-            // Criar o agendamento
             Agendamento agendamento = new Agendamento(
                     data, horaInicio, duracao,
                     cliente.getId(), advogado.getId(), tipo.getId(),
@@ -314,7 +295,7 @@ public class AgendamentoPanel extends JPanel {
                         "O agendamento foi registrado e os envolvidos serão notificados.");
                 
                 mainFrame.voltarParaHome();
-                mainFrame.mostrarPainelCalendario(); // Mostrar calendário atualizado
+                mainFrame.mostrarPainelCalendario(); 
             } else {
                 FormValidator.mostrarErro(this, "Erro ao criar agendamento: " + resultado.getMensagem());
             }

@@ -6,7 +6,7 @@ import java.time.LocalTime;
 public class DisponibilidadeAdvogado {
     private int id;
     private int idUsuario;
-    private int diaSemana; // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
+    private int diaSemana;
     private LocalTime horarioInicio;
     private LocalTime horarioFim;
     

@@ -187,7 +187,7 @@ public class HomePanel extends JPanel {
         );
         menu.add(listarClientesOption);
         
-        // Seção AGENDAMENTOS
+        
         JPanel agendamentosHeader = criarCabecalhoMenu("AGENDAMENTOS");
         menu.add(agendamentosHeader);
         
@@ -205,7 +205,7 @@ public class HomePanel extends JPanel {
         );
         menu.add(calendarioOption);
         
-        // Adicionar seção de DISPONIBILIDADE apenas para advogados
+        
         if (usuarioLogado.getTipoUsuario() == TipoUsuario.ADVOGADO) {
             JPanel disponibilidadeHeader = criarCabecalhoMenu("DISPONIBILIDADE");
             menu.add(disponibilidadeHeader);
@@ -225,7 +225,7 @@ public class HomePanel extends JPanel {
             menu.add(excecoesOption);
         }
         
-        // Adicionar seção de CONFIGURAÇÕES para o secretário
+        
         if (usuarioLogado.getTipoUsuario() == TipoUsuario.SECRETARIO) {
             JPanel configuracoesHeader = criarCabecalhoMenu("CONFIGURAÇÕES");
             menu.add(configuracoesHeader);
@@ -318,7 +318,7 @@ public class HomePanel extends JPanel {
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(UIConstants.PANEL_BACKGROUND);
         
-        // Ajuste do título principal
+        
         JLabel lblDashboard = new JLabel("Bem-vindo ao Sistema de Agendamentos HERMES", SwingConstants.CENTER);
         lblDashboard.setForeground(UIConstants.HIGHLIGHT_TEXT_COLOR);
         lblDashboard.setFont(new Font(UIConstants.TITLE_FONT.getName(), Font.BOLD, 22));
@@ -328,7 +328,7 @@ public class HomePanel extends JPanel {
         botoesRapidos.setBackground(UIConstants.PANEL_BACKGROUND);
         botoesRapidos.setAlignmentX(CENTER_ALIGNMENT);
         
-        // Criar botões com tamanho maior
+        
         Dimension botaoDimensao = new Dimension(250, 80);
         Font fonteBotao = new Font(UIConstants.BUTTON_FONT.getName(), Font.BOLD, 16);
         
@@ -359,7 +359,7 @@ public class HomePanel extends JPanel {
         btnTiposAtendimento.setFont(fonteBotao);
         btnTiposAtendimento.addActionListener(e -> mainFrame.mostrarPainelTipoAtendimento());
         
-        // Organizar botões em duas linhas
+        
         JPanel linhaUm = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         linhaUm.setBackground(UIConstants.PANEL_BACKGROUND);
         linhaUm.add(btnNovoAgendamento);
@@ -370,12 +370,12 @@ public class HomePanel extends JPanel {
         linhaDois.add(btnClientes);
         linhaDois.add(btnTiposAtendimento);
         
-        // Adicionar as linhas ao painel de botões
+        
         botoesRapidos.setLayout(new BoxLayout(botoesRapidos, BoxLayout.Y_AXIS));
         botoesRapidos.add(linhaUm);
         botoesRapidos.add(linhaDois);
         
-        // Botão de disponibilidade somente para advogados
+        
         if (usuarioLogado.getTipoUsuario() == TipoUsuario.ADVOGADO) {
             JButton btnDisponibilidade = new JButton("Gerenciar Disponibilidade");
             UIConstants.setupSecondaryButton(btnDisponibilidade, "Gerenciar Disponibilidade");

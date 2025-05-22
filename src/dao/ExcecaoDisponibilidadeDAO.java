@@ -32,7 +32,6 @@ public class ExcecaoDisponibilidadeDAO extends BaseDAO {
                 try {
                     return mapearExcecao(t);
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;
@@ -51,7 +50,6 @@ public class ExcecaoDisponibilidadeDAO extends BaseDAO {
                 try {
                     return mapearExcecao(t);
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;

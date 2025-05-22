@@ -88,7 +88,6 @@ public class UsuarioDAO extends BaseDAO {
                 try {
                     return mapearUsuario(t);
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;
@@ -105,7 +104,6 @@ public class UsuarioDAO extends BaseDAO {
                 try {
                     return mapearUsuario(t);
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;

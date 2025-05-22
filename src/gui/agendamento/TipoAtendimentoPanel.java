@@ -274,7 +274,6 @@ public class TipoAtendimentoPanel extends JPanel {
     }
     
     private Color getContrastColor(Color cor) {
-        // Calcular luminosidade para escolher texto claro ou escuro
         double luminance = 0.299 * cor.getRed() + 0.587 * cor.getGreen() + 0.114 * cor.getBlue();
         return luminance > 128 ? Color.BLACK : Color.WHITE;
     }

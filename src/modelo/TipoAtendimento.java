@@ -5,7 +5,7 @@ import java.awt.Color;
 public class TipoAtendimento {
     private int id;
     private String nome;
-    private int duracaoPadrao; // Em minutos
+    private int duracaoPadrao;
     private String cor;
     
     public TipoAtendimento() {
@@ -60,7 +60,6 @@ public class TipoAtendimento {
         try {
             return Color.decode(cor);
         } catch (NumberFormatException e) {
-            // Fallback para cor padrão
             return Color.BLUE;
         }
     }

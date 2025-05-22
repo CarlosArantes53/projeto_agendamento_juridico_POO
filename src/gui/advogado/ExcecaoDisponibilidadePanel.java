@@ -86,7 +86,6 @@ public class ExcecaoDisponibilidadePanel extends JPanel {
         
         FormPanel formFields = new FormPanel();
         
-        // Usando JFormattedTextField com máscara para data no formato DD/MM/AAAA
         try {
             MaskFormatter dateMask = new MaskFormatter("##/##/####");
             dateMask.setPlaceholderCharacter('_');
@@ -99,7 +98,6 @@ public class ExcecaoDisponibilidadePanel extends JPanel {
             txtDataFim.setColumns(10);
             txtDataFim.setFont(UIConstants.LABEL_FONT);
             
-            // Preencher com a data atual formatada
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate hoje = LocalDate.now();
             txtDataInicio.setValue(hoje.format(formatter));
@@ -191,14 +189,13 @@ public class ExcecaoDisponibilidadePanel extends JPanel {
             }
         });
         
-        // Configurar coluna de ações
         tblExcecoes.getColumnModel().getColumn(0).setMaxWidth(50);
         tblExcecoes.getColumnModel().getColumn(0).setMinWidth(50);
         
         TableActionCellRenderer actionRenderer = new TableActionCellRenderer(false, true, false);
         TableActionCellEditor actionEditor = new TableActionCellEditor(
             TableActionListener.create(
-                row -> {}, // Não utilizado
+                row -> {}, 
                 this::excluirExcecao
             )
         );
@@ -263,13 +260,11 @@ public class ExcecaoDisponibilidadePanel extends JPanel {
             ExcecaoDisponibilidade excecao = new ExcecaoDisponibilidade(
                     usuarioLogado.getId(), dataInicio, dataFim, motivo);
             
-            // Validar datas
             if (!excecaoDAO.verificarDatasFim(excecao)) {
                 FormValidator.mostrarErro(this, "A data de fim deve ser igual ou posterior à data de início!");
                 return;
             }
             
-            // Validar se a data é futura
             if (!excecaoDAO.verificarDataFutura(excecao)) {
                 FormValidator.mostrarErro(this, "As datas devem ser futuras!");
                 return;
@@ -315,7 +310,6 @@ public class ExcecaoDisponibilidadePanel extends JPanel {
     }
     
     private void limparCampos() {
-        // Preencher com a data atual formatada
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate hoje = LocalDate.now();
         txtDataInicio.setValue(hoje.format(formatter));

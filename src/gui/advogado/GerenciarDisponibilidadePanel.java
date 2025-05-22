@@ -106,7 +106,6 @@ public class GerenciarDisponibilidadePanel extends JPanel {
         spnHoraFim.setEditor(editorFim);
         formFields.addComponent("Horário de Fim:", spnHoraFim);
         
-        // Definir valores padrão para os spinners
         java.util.Calendar calInicio = java.util.Calendar.getInstance();
         calInicio.set(java.util.Calendar.HOUR_OF_DAY, 8);
         calInicio.set(java.util.Calendar.MINUTE, 0);
@@ -192,14 +191,13 @@ public class GerenciarDisponibilidadePanel extends JPanel {
             }
         });
         
-        // Configurar coluna de ações
         tblDisponibilidade.getColumnModel().getColumn(0).setMaxWidth(50);
         tblDisponibilidade.getColumnModel().getColumn(0).setMinWidth(50);
         
         TableActionCellRenderer actionRenderer = new TableActionCellRenderer(false, true, false);
         TableActionCellEditor actionEditor = new TableActionCellEditor(
             TableActionListener.create(
-                row -> {}, // Não utilizado
+                row -> {}, 
                 this::excluirDisponibilidade
             )
         );
@@ -259,7 +257,6 @@ public class GerenciarDisponibilidadePanel extends JPanel {
                 calFim.get(java.util.Calendar.HOUR_OF_DAY),
                 calFim.get(java.util.Calendar.MINUTE));
         
-        // Validar horários
         if (horaInicio.isAfter(horaFim) || horaInicio.equals(horaFim)) {
             FormValidator.mostrarErro(this, "O horário de início deve ser anterior ao horário de fim!");
             return;
@@ -269,7 +266,6 @@ public class GerenciarDisponibilidadePanel extends JPanel {
                 usuarioLogado.getId(), diaSemana, horaInicio, horaFim);
         
         try {
-            // Verificar sobreposição
             if (disponibilidadeDAO.verificarSobreposicao(disponibilidade)) {
                 FormValidator.mostrarErro(this, 
                         "Já existe disponibilidade cadastrada para este dia e horário!");

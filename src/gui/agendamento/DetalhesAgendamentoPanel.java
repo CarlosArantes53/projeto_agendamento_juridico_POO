@@ -69,11 +69,11 @@ public class DetalhesAgendamentoPanel extends JPanel {
                 BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
         
-        // Formatadores
+        
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         
-        // Campos de informação
+        
         JLabel lblTitulo = new JLabel(agendamento.getNomeTipoAtendimento());
         lblTitulo.setForeground(UIConstants.HIGHLIGHT_TEXT_COLOR);
         lblTitulo.setFont(UIConstants.TITLE_FONT);
@@ -88,7 +88,7 @@ public class DetalhesAgendamentoPanel extends JPanel {
         JLabel lblAdvogado = criarLabel("Advogado:", agendamento.getNomeAdvogado());
         JLabel lblStatus = criarLabel("Status Atual:", agendamento.getStatus().toString());
         
-        // Área para descrição
+        
         JLabel lblDescricao = new JLabel("Descrição/Observações:");
         lblDescricao.setForeground(UIConstants.TEXT_COLOR);
         lblDescricao.setFont(UIConstants.LABEL_FONT);

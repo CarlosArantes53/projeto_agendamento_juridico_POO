@@ -29,7 +29,6 @@ public class TipoAtendimentoDAO extends BaseDAO {
                 try {
                     return mapearTipoAtendimento(t);
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;
@@ -66,7 +65,6 @@ public class TipoAtendimentoDAO extends BaseDAO {
     }
     
     public boolean excluir(int id) throws SQLException {
-        // Verificar se o tipo está sendo usado em algum agendamento
         String sqlVerificar = "SELECT COUNT(*) FROM agendamentos WHERE id_tipo_atendimento = ?";
         
         boolean emUso = executeQuery(sqlVerificar, 

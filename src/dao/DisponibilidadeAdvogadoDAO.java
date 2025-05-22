@@ -31,7 +31,6 @@ public class DisponibilidadeAdvogadoDAO extends BaseDAO {
                 try {
                     return mapearDisponibilidade(t);
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;

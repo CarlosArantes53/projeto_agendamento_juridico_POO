@@ -67,7 +67,6 @@ public class AgendamentoDAO extends BaseDAO {
                 try {
                     return mapearAgendamento(t);
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;
@@ -95,7 +94,6 @@ public class AgendamentoDAO extends BaseDAO {
                 try {
                     return mapearAgendamento(t);
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;
@@ -119,7 +117,6 @@ public class AgendamentoDAO extends BaseDAO {
                 try {
                     return mapearAgendamento(t);
                 } catch (SQLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 return null;
